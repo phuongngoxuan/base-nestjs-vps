@@ -54,6 +54,12 @@ export class petsTable1678951950137 implements MigrationInterface {
             isNullable: false,
           },
           {
+            name: 'pet_vendor_id',
+            type: 'int',
+            unsigned: true,
+            isNullable: false,
+          },
+          {
             name: 'is_available',
             type: 'boolean',
             unsigned: true,

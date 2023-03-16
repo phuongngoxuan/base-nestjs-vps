@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class proceedPetExchangesTable1678951825071 implements MigrationInterface {
+export class petVendorsTable1678961400000 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'proceed_pet_exchanges',
+        name: 'pet_vendors',
         columns: [
           {
             name: 'id',
@@ -15,39 +15,18 @@ export class proceedPetExchangesTable1678951825071 implements MigrationInterface
             isNullable: false,
           },
           {
-            name: 'pet_id',
-            type: 'int',
-            unsigned: true,
+            name: 'name',
+            type: 'varchar',
             isNullable: false,
           },
           {
-            name: 'buyer_id',
-            type: 'int',
-            unsigned: true,
+            name: 'address',
+            type: 'varchar',
             isNullable: false,
           },
           {
-            name: 'seller_id',
-            type: 'int',
-            unsigned: true,
-            isNullable: false,
-          },
-          {
-            name: 'pet_vendor_id',
-            type: 'int',
-            unsigned: true,
-            isNullable: false,
-          },
-          {
-            name: 'status',
-            type: 'int',
-            enum: ['pending', 'in progress', 'completed'],
-            isNullable: false,
-            default: 'pending',
-          },
-          {
-            name: 'transaction_value',
-            type: 'decimal(20,2)',
+            name: 'phone_number',
+            type: 'varchar',
             isNullable: false,
           },
           {
@@ -68,6 +47,6 @@ export class proceedPetExchangesTable1678951825071 implements MigrationInterface
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('proceed_pet_exchanges');
+    await queryRunner.dropTable('pet_vendors');
   }
 }

@@ -10,6 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { PetVendorsEntity } from './pet-vendors.entity';
 import { ProceedPetExchangesEntity } from './proceed-pet-exchanges';
 import { UsersEntity } from './users.entity';
 
@@ -46,6 +47,11 @@ export class PetsEntity {
   userId: number;
 
   @Column({
+    name: 'pet_vendor_id',
+  })
+  petVendorId: number;
+
+  @Column({
     name: 'is_available',
   })
   isAvailable: boolean;
@@ -66,4 +72,10 @@ export class PetsEntity {
 
   @OneToMany(() => ProceedPetExchangesEntity, (proceedPetExchanges) => proceedPetExchanges.pet)
   proceedPetExchanges: ProceedPetExchangesEntity[];
+
+  @ManyToOne(() => PetVendorsEntity, (petVendor) => petVendor.pets, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ referencedColumnName: 'id', name: 'pet_vendor_id' })
+  petVendor: PetVendorsEntity;
 }
