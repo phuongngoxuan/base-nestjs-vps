@@ -3,17 +3,12 @@ import { sleep } from 'src/shares/helpers/utils';
 import { LogEventDto } from './dto/log-event-crawler.dto';
 import { FactoryHandler } from './crawler-factory.handler';
 import { ContractDto, GetBlockDto } from './dto/contract.dto';
-import { PoolsEntity } from 'src/models/entities/pools.entity';
 import { UsersEntity } from '../../models/entities/users.entity';
-import { TokensEntity } from 'src/models/entities/tokens.entity';
 import { TransactionCrawlDto } from './dto/transaction-crawl.dto';
 import { UserInfoEntity } from 'src/models/entities/user-info.entity';
 import { HistoriesEntity } from '../../models/entities/histories.entity';
 import { Repository, Transaction, TransactionRepository } from 'typeorm';
-import { UserPoolEntity } from '../../models/entities/user-pools.entity';
 import { CrawlEntity } from '../../models/entities/crawler-status.entity';
-import { TokenPoolsEntity } from 'src/models/entities/token-pools.entity';
-import { UserPoolTokenEntity } from '../../models/entities/user-pool-tokens.entity';
 import { bscPoolFactoryContractInfo } from './config/crawler.config';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Web3 = require('web3');
@@ -38,25 +33,15 @@ export class CrawlerService {
   async rootControllerCrawl(
     contractInfo: ContractDto,
     @TransactionRepository(UsersEntity) transactionRepositoryUser?: Repository<UsersEntity>,
-    @TransactionRepository(PoolsEntity) transactionRepositoryPool?: Repository<PoolsEntity>,
     @TransactionRepository(CrawlEntity) transactionRepositoryCrawl?: Repository<CrawlEntity>,
-    @TransactionRepository(TokensEntity) transactionRepositoryToken?: Repository<TokensEntity>,
     @TransactionRepository(UserInfoEntity) transactionRepositoryUserInfo?: Repository<UserInfoEntity>,
     @TransactionRepository(HistoriesEntity) transactionRepositoryHistory?: Repository<HistoriesEntity>,
-    @TransactionRepository(UserPoolEntity) transactionRepositoryUserPools?: Repository<UserPoolEntity>,
-    @TransactionRepository(TokenPoolsEntity) transactionRepositoryTokenPool?: Repository<TokenPoolsEntity>,
-    @TransactionRepository(UserPoolTokenEntity) transactionRepositoryUserPoolTokens?: Repository<UserPoolTokenEntity>,
   ): Promise<void> {
     const transaction: TransactionCrawlDto = {
       transactionRepositoryUser,
-      transactionRepositoryPool,
       transactionRepositoryCrawl,
-      transactionRepositoryToken,
       transactionRepositoryHistory,
       transactionRepositoryUserInfo,
-      transactionRepositoryTokenPool,
-      transactionRepositoryUserPools,
-      transactionRepositoryUserPoolTokens,
     };
     const { latestBlockInSC, blockInDB } = await this.getBlockSCAndBlockDB(contractInfo, transaction);
     // check block validate

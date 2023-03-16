@@ -6,9 +6,9 @@ import { checkRecoverSameAddress } from 'src/shares/helpers/utils';
 import { CreateUserDto } from 'src/modules/user/dto/create-user.dto';
 import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { Repository, Transaction, TransactionRepository } from 'typeorm';
-import { PoolRepository } from 'src/models/repositories/pools.repository';
+
 import { UserRepository } from 'src/models/repositories/users.repository';
-import { UserPoolInfoRepository } from '../../models/repositories/user-pools.repository';
+
 import { TransactionCrawlDto } from '../crawler/dto/transaction-crawl.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { GetUsersDto } from './dto/get-users.dto';
@@ -19,10 +19,6 @@ export class UserService {
   constructor(
     @InjectRepository(UserRepository, 'master') private usersRepositoryMaster: UserRepository,
     @InjectRepository(UserRepository, 'report') private usersRepositoryReport: UserRepository,
-    @InjectRepository(PoolRepository, 'master') private poolRepositoryMaster: PoolRepository,
-    @InjectRepository(PoolRepository, 'report') private poolRepositoryReport: PoolRepository,
-    @InjectRepository(UserPoolInfoRepository, 'master') private userPoolInfoRepositoryMaster: UserPoolInfoRepository,
-    @InjectRepository(UserPoolInfoRepository, 'report') private userPoolInfoRepositoryReport: UserPoolInfoRepository,
   ) {}
 
   async checkUserIdExisted(id: number): Promise<boolean> {

@@ -1,12 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class createTokensTable1663054169335 implements MigrationInterface {
-  name = 'createTokensTable1663054169335';
-
+export class petsTable1678951950137 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'tokens',
+        name: 'pets',
         columns: [
           {
             name: 'id',
@@ -14,66 +12,52 @@ export class createTokensTable1663054169335 implements MigrationInterface {
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment',
-            unsigned: true,
+            isNullable: false,
           },
           {
-            name: 'token0_id',
+            name: 'name',
+            type: 'varchar',
+            isNullable: false,
+          },
+          {
+            name: 'age',
+            type: 'tinyint(3)',
+            unsigned: true,
+            isNullable: false,
+          },
+          {
+            name: 'species',
+            type: 'varchar(50)',
+            unsigned: true,
+            isNullable: false,
+          },
+          {
+            name: 'breed',
+            type: 'varchar(50)',
+            isNullable: false,
+            default: 'pending',
+          },
+          {
+            name: 'description',
+            type: 'text',
+            isNullable: false,
+          },
+          {
+            name: 'image_url',
+            type: 'varchar(255)',
+            isNullable: false,
+          },
+          {
+            name: 'user_id',
             type: 'int',
             unsigned: true,
-          },
-          {
-            name: 'token1_id',
-            type: 'int',
-            unsigned: true,
-          },
-          {
-            name: 'chain',
-            type: 'varchar',
             isNullable: false,
           },
           {
-            name: 'address',
-            type: 'varchar',
-            isNullable: false,
-          },
-          {
-            name: 'thumb_logo',
-            type: 'varchar',
-          },
-          {
-            name: 'large_logo',
-            type: 'varchar',
-          },
-          {
-            name: 'usd',
-            type: 'decimal',
-            precision: 40,
-            scale: 10,
-            isNullable: false,
-            default: 0,
-          },
-          {
-            name: 'existed_on_coingecko',
+            name: 'is_available',
             type: 'boolean',
-            default: true,
-          },
-          {
-            name: 'token_name',
-            type: 'varchar',
+            unsigned: true,
             isNullable: false,
-          },
-          {
-            name: 'symbol',
-            type: 'varchar',
-          },
-          {
-            name: 'symbol_token_lp',
-            type: 'varchar',
-          },
-          {
-            name: 'decimal',
-            type: 'int',
-            default: 0,
           },
           {
             name: 'created_at',
@@ -93,6 +77,6 @@ export class createTokensTable1663054169335 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('tokens');
+    await queryRunner.dropTable('pets');
   }
 }

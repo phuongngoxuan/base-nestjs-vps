@@ -17,7 +17,7 @@ export class createUsersTable1645095329121 implements MigrationInterface {
             unsigned: true,
           },
           {
-            name: 'email',
+            name: 'user_name',
             type: 'varchar',
             isNullable: true,
           },
@@ -25,6 +25,16 @@ export class createUsersTable1645095329121 implements MigrationInterface {
             name: 'address',
             type: 'varchar',
             isNullable: true,
+          },
+          {
+            name: 'email',
+            type: 'varchar',
+            isNullable: false,
+          },
+          {
+            name: 'password',
+            type: 'varchar',
+            isNullable: false,
           },
           {
             name: 'role',
