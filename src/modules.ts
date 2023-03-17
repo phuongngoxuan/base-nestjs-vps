@@ -18,6 +18,7 @@ import { CrawlerModule } from './modules/crawler/crawler.module';
 import { ReadScModule } from './modules/read-sc/read-sc.module';
 import { HistoryModule } from './modules/history/history.module';
 import { SeederModule } from './modules/seeder/seeder.module';
+import { ProductModule } from './modules/product/product.module';
 
 const Modules = [
   Logger,
@@ -45,5 +46,6 @@ const Modules = [
   ReadScModule,
   HistoryModule,
   SeederModule,
+  ProductModule,
 ];
 export default Modules;

@@ -8,6 +8,7 @@ import { PetVendorsRepository } from './repositories/pet-vendors.repository';
 import { PetsRepository } from './repositories/pets.repository';
 import { ProceedPetExchangesRepository } from './repositories/proceed-pet-exchanges.repository';
 import { ReviewRepository } from './repositories/reviews.repository';
+import { ProductRepository } from './repositories/product.repository';
 
 const commonRepositories = [
   UserRepository,
@@ -17,7 +18,8 @@ const commonRepositories = [
   PetsRepository,
   ProceedPetExchangesRepository,
   PetVendorsRepository,
-  ReviewRepository
+  ReviewRepository,
+  ProductRepository,
 ];
 
 @Global()

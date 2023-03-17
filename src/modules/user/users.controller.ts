@@ -9,7 +9,6 @@ import {
   Post,
   Delete,
   Param,
-  UseInterceptors,
   Query,
 } from '@nestjs/common';
 import { ApiResponse, ApiBearerAuth, ApiTags, ApiOperation, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
@@ -19,7 +18,6 @@ import { UsersEntity } from 'src/models/entities/users.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { GetUserDto } from './dto/get-user.dto';
-import { TransformInterceptor } from '../../shares/interceptors/transform.interceptor ';
 import { GetUsersDto } from './dto/get-users.dto';
 import { UserList } from 'src/shares/interface/paging-response.interface';
 
