@@ -39,7 +39,7 @@ export class UsersEntity {
   @OneToMany(() => MessageChatEntity, (message) => message.receiver)
   message_receivers: MessageChatEntity[];
 
-  @OneToMany(() => PetsEntity, (pet) => pet.user)
+  @OneToMany(() => PetsEntity, (pet) => pet.petOwner)
   pets: PetsEntity[];
 
   @OneToMany(() => ProceedPetExchangesEntity, (proceed) => proceed.buyer)

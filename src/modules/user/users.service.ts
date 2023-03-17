@@ -12,7 +12,7 @@ import { UserRepository } from 'src/models/repositories/users.repository';
 import { TransactionCrawlDto } from '../crawler/dto/transaction-crawl.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { GetUsersDto } from './dto/get-users.dto';
-import { UserList } from 'src/shares/interface/paging-response.interface';
+import { GetUserListRes } from 'src/shares/interface/paging-response.interface';
 
 @Injectable()
 export class UserService {
@@ -63,7 +63,7 @@ export class UserService {
     return user;
   }
 
-  async findAll(getUser: GetUsersDto): Promise<UserList> {
+  async findAll(getUser: GetUsersDto): Promise<GetUserListRes> {
     return this.usersRepositoryReport.getUsers(getUser);
   }
 

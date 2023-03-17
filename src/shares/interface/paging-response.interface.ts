@@ -1,7 +1,8 @@
+import { PetsEntity } from 'src/models/entities/pets.entity';
 import { UsersEntity } from 'src/models/entities/users.entity';
 
-export interface UserList {
-  items: UsersEntity[];
+
+interface meta {
   meta: {
     currentPage: number;
     itemCount: number;
@@ -9,4 +10,12 @@ export interface UserList {
     totalItems: number;
     totalPages: number;
   };
+}
+export interface GetUserListRes extends meta {
+  items: UsersEntity[];
+}
+
+
+export interface GetPetListRes extends meta {
+  items: PetsEntity[];
 }

@@ -42,9 +42,9 @@ export class PetsEntity {
   imageUrl: string;
 
   @Column({
-    name: 'user_id',
+    name: 'pet_owner_id',
   })
-  userId: number;
+  petOwnerId: number;
 
   @Column({
     name: 'pet_vendor_id',
@@ -67,8 +67,8 @@ export class PetsEntity {
   @ManyToOne(() => UsersEntity, (user) => user.pets, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ referencedColumnName: 'id', name: 'user_id' })
-  user: UsersEntity;
+  @JoinColumn({ referencedColumnName: 'id', name: 'pet_owner_id' })
+  petOwner: UsersEntity;
 
   @OneToMany(() => ProceedPetExchangesEntity, (proceedPetExchanges) => proceedPetExchanges.pet)
   proceedPetExchanges: ProceedPetExchangesEntity[];
