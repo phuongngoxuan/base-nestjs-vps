@@ -6,55 +6,33 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { PetVendorsEntity } from './pet-vendors.entity';
-import { ProceedPetExchangesEntity } from './proceed-pet-exchanges';
 import { UsersEntity } from './users.entity';
 
 @Entity({
-  name: 'pets',
+  name: 'reviews',
 })
-export class PetsEntity {
+export class ReviewEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  name: string;
-
-  @Column()
-  age: number;
-
-  @Column()
-  species: string;
-
-  @Column()
-  breed: string;
-
-  @Column()
-  description: string;
-
-  @Column({
-    name: 'image_url',
-  })
-  imageUrl: string;
-
-  @Column({
-    name: 'user_id',
-  })
+  @Column({name:'user_id'})
   userId: number;
 
-  @Column({
-    name: 'pet_vendor_id',
-  })
-  petVendorId: number;
+  @Column({name:'pet_vendor_id'})
+  vendorId: number;
 
-  @Column({
-    name: 'is_available',
-  })
-  isAvailable: boolean;
+  @Column()
+  rating: number;
+
+  @Column()
+  comments: string;
+
+  @Column({name:'image_url'})
+  imageUrl: string;
 
   @CreateDateColumn({ name: 'created_at' })
   @Transform(dateTransformer)
@@ -64,18 +42,19 @@ export class PetsEntity {
   @Transform(dateTransformer)
   updatedAt: Date;
 
-  @ManyToOne(() => UsersEntity, (user) => user.pets, {
+
+  // todo create relation ship 
+
+  @ManyToOne(() => UsersEntity, (user) => user.reviews, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ referencedColumnName: 'id', name: 'user_id' })
   user: UsersEntity;
 
-  @OneToMany(() => ProceedPetExchangesEntity, (proceedPetExchanges) => proceedPetExchanges.pet)
-  proceedPetExchanges: ProceedPetExchangesEntity[];
-
-  @ManyToOne(() => PetVendorsEntity, (petVendor) => petVendor.pets, {
+  @ManyToOne(() => PetVendorsEntity, (petVendor) => petVendor.reviews, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ referencedColumnName: 'id', name: 'pet_vendor_id' })
   petVendor: PetVendorsEntity;
+
 }

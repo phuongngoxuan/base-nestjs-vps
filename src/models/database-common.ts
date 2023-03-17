@@ -4,8 +4,10 @@ import { UserRepository } from 'src/models/repositories/users.repository';
 import { CrawlStatusRepository } from './repositories/crawler.repository';
 import { HistoriesRepository } from './repositories/histories.repository';
 import { MessageChatRepository } from './repositories/message-chats.repositoty';
+import { PetVendorsRepository } from './repositories/pet-vendors.repository';
 import { PetsRepository } from './repositories/pets.repository';
 import { ProceedPetExchangesRepository } from './repositories/proceed-pet-exchanges.repository';
+import { ReviewRepository } from './repositories/reviews.repository';
 
 const commonRepositories = [
   UserRepository,
@@ -14,6 +16,8 @@ const commonRepositories = [
   MessageChatRepository,
   PetsRepository,
   ProceedPetExchangesRepository,
+  PetVendorsRepository,
+  ReviewRepository
 ];
 
 @Global()

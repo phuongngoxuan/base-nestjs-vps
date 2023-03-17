@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class createCrawlStatusTable1645504787204 implements MigrationInterface {
-  name = 'createCrawlStatusTable1645504787204';
+export class petVendorsTable1678961400000 implements MigrationInterface {
+  name = 'petVendorsTable1678961400000';
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'crawl_status',
+        name: 'pet_vendors',
         columns: [
           {
             name: 'id',
@@ -16,18 +16,18 @@ export class createCrawlStatusTable1645504787204 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'contract_name',
+            name: 'name',
             type: 'varchar',
             isNullable: false,
           },
           {
-            name: 'contract_address',
+            name: 'address',
             type: 'varchar',
             isNullable: false,
           },
           {
-            name: 'block_number',
-            type: 'int',
+            name: 'phone_number',
+            type: 'varchar',
             isNullable: false,
           },
           {
@@ -48,6 +48,6 @@ export class createCrawlStatusTable1645504787204 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('crawl_status');
+    await queryRunner.dropTable('pet_vendors');
   }
 }
