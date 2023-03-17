@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
 
-export class proceedPetExchangesTable1678951825071 implements MigrationInterface {
-  name = 'proceedPetExchangesTable1678951825071';
+export class proceedPetExchangesTable1679039736471 implements MigrationInterface {
+  name = 'proceedPetExchangesTable1679039736471';
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
@@ -14,6 +14,7 @@ export class proceedPetExchangesTable1678951825071 implements MigrationInterface
             isGenerated: true,
             generationStrategy: 'increment',
             isNullable: false,
+            unsigned: true,
           },
           {
             name: 'pet_id',

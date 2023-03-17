@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
 
-export class petsTable1678951950137 implements MigrationInterface {
-  name = 'petsTable1678951950137';
+export class messageChatsTable1679039271210 implements MigrationInterface {
+  name = 'messageChatsTable1679039271210';
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'pets',
+        name: 'message_chats',
         columns: [
           {
             name: 'id',
@@ -14,53 +14,23 @@ export class petsTable1678951950137 implements MigrationInterface {
             isGenerated: true,
             generationStrategy: 'increment',
             isNullable: false,
+            unsigned: true,
           },
           {
-            name: 'name',
-            type: 'varchar',
-            isNullable: false,
-          },
-          {
-            name: 'age',
-            type: 'tinyint(3)',
+            name: 'sender_id',
+            type: 'int',
             unsigned: true,
             isNullable: false,
           },
           {
-            name: 'species',
-            type: 'varchar(50)',
+            name: 'receiver_id',
+            type: 'int',
+            unsigned: true,
             isNullable: false,
           },
           {
-            name: 'breed',
-            type: 'varchar(50)',
-            isNullable: false,
-          },
-          {
-            name: 'description',
+            name: 'message',
             type: 'text',
-            isNullable: false,
-          },
-          {
-            name: 'image_url',
-            type: 'varchar(255)',
-            isNullable: false,
-          },
-          {
-            name: 'user_id',
-            type: 'int',
-            unsigned: true,
-            isNullable: false,
-          },
-          {
-            name: 'pet_vendor_id',
-            type: 'int',
-            unsigned: true,
-            isNullable: false,
-          },
-          {
-            name: 'is_available',
-            type: 'boolean',
             isNullable: false,
           },
           {
@@ -80,9 +50,19 @@ export class petsTable1678951950137 implements MigrationInterface {
     );
 
     await queryRunner.createForeignKey(
-      'pets',
+      'message_chats',
       new TableForeignKey({
-        columnNames: ['user_id'],
+        columnNames: ['sender_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'users',
+        onDelete: 'CASCADE',
+      }),
+    );
+
+    await queryRunner.createForeignKey(
+      'message_chats',
+      new TableForeignKey({
+        columnNames: ['receiver_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'users',
         onDelete: 'CASCADE',
@@ -91,13 +71,18 @@ export class petsTable1678951950137 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    const table = await queryRunner.getTable('pets');
+    const table = await queryRunner.getTable('message_chats');
 
-    // Drop FK user
-    const foreignKeyUser = table.foreignKeys.find((fk) => fk.columnNames.indexOf('user_id') !== -1);
-    await queryRunner.dropForeignKey('user_id', foreignKeyUser);
-    await queryRunner.dropColumn('pets', 'user_id');
+    // Drop FK sender
+    const foreignKeySender = table.foreignKeys.find((fk) => fk.columnNames.indexOf('sender_id') !== -1);
+    await queryRunner.dropForeignKey('sender_id', foreignKeySender);
+    await queryRunner.dropColumn('message_chats', 'sender_id');
 
-    await queryRunner.dropTable('pets');
+    // Drop FK receiver
+    const foreignKeyReceiver = table.foreignKeys.find((fk) => fk.columnNames.indexOf('receiver_id') !== -1);
+    await queryRunner.dropForeignKey('receiver_id', foreignKeyReceiver);
+    await queryRunner.dropColumn('message_chats', 'receiver_id');
+
+    await queryRunner.dropTable('message_chats');
   }
 }
