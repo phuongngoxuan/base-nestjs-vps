@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class petVendorsTable1678961400000 implements MigrationInterface {
-  name = 'petVendorsTable1678961400000';
+export class petVendorsTable1679039304032 implements MigrationInterface {
+  name = 'petVendorsTable1679039304032';
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
@@ -14,6 +14,7 @@ export class petVendorsTable1678961400000 implements MigrationInterface {
             isGenerated: true,
             generationStrategy: 'increment',
             isNullable: false,
+            unsigned: true,
           },
           {
             name: 'name',
