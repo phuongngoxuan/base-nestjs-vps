@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
 
-export class petsTable1678951950137 implements MigrationInterface {
-  name = 'petsTable1678951950137';
+export class reviewsTable1679020126706 implements MigrationInterface {
+  name = 'reviewsTable1679020126706';
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'pets',
+        name: 'reviews',
         columns: [
           {
             name: 'id',
@@ -13,37 +13,6 @@ export class petsTable1678951950137 implements MigrationInterface {
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment',
-            isNullable: false,
-          },
-          {
-            name: 'name',
-            type: 'varchar',
-            isNullable: false,
-          },
-          {
-            name: 'age',
-            type: 'tinyint(3)',
-            unsigned: true,
-            isNullable: false,
-          },
-          {
-            name: 'species',
-            type: 'varchar(50)',
-            isNullable: false,
-          },
-          {
-            name: 'breed',
-            type: 'varchar(50)',
-            isNullable: false,
-          },
-          {
-            name: 'description',
-            type: 'text',
-            isNullable: false,
-          },
-          {
-            name: 'image_url',
-            type: 'varchar(255)',
             isNullable: false,
           },
           {
@@ -59,9 +28,17 @@ export class petsTable1678951950137 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'is_available',
-            type: 'boolean',
+            name: 'rating',
+            type: 'int',
+          },
+          {
+            name: 'comments',
+            type: 'text',
             isNullable: false,
+          },
+          {
+            name: 'image_url',
+            type: 'varchar',
           },
           {
             name: 'created_at',
@@ -80,7 +57,7 @@ export class petsTable1678951950137 implements MigrationInterface {
     );
 
     await queryRunner.createForeignKey(
-      'pets',
+      'reviews',
       new TableForeignKey({
         columnNames: ['user_id'],
         referencedColumnNames: ['id'],
@@ -88,16 +65,31 @@ export class petsTable1678951950137 implements MigrationInterface {
         onDelete: 'CASCADE',
       }),
     );
+
+    await queryRunner.createForeignKey(
+      'reviews',
+      new TableForeignKey({
+        columnNames: ['pet_vendor_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'pet_vendors',
+        onDelete: 'CASCADE',
+      }),
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    const table = await queryRunner.getTable('pets');
+    const table = await queryRunner.getTable('reviews');
 
     // Drop FK user
     const foreignKeyUser = table.foreignKeys.find((fk) => fk.columnNames.indexOf('user_id') !== -1);
     await queryRunner.dropForeignKey('user_id', foreignKeyUser);
-    await queryRunner.dropColumn('pets', 'user_id');
+    await queryRunner.dropColumn('reviews', 'user_id');
 
-    await queryRunner.dropTable('pets');
+    // Drop FK pet vendor
+    const foreignKeyPetVendor = table.foreignKeys.find((fk) => fk.columnNames.indexOf('pet_vendor_id') !== -1);
+    await queryRunner.dropForeignKey('pet_vendor_id', foreignKeyPetVendor);
+    await queryRunner.dropColumn('reviews', 'pet_vendor_id');
+
+    await queryRunner.dropTable('reviews');
   }
 }

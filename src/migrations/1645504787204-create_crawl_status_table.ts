@@ -1,6 +1,7 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class createCrawlStatusTable1645504787204 implements MigrationInterface {
+  name = 'createCrawlStatusTable1645504787204';
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({

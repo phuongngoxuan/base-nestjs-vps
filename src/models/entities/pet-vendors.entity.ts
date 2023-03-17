@@ -3,6 +3,7 @@ import { dateTransformer } from 'src/shares/helpers/transformer';
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { PetsEntity } from './pets.entity';
 import { ProceedPetExchangesEntity } from './proceed-pet-exchanges';
+import { ReviewEntity } from './reviews.entity';
 
 @Entity({
   name: 'pet_vendors',
@@ -33,4 +34,7 @@ export class PetVendorsEntity {
 
   @OneToMany(() => PetsEntity, (pet) => pet.petVendor)
   pets: PetsEntity[];
+
+  @OneToMany(() => ReviewEntity, (review) => review.petVendor)
+  reviews: ReviewEntity[];
 }

@@ -5,6 +5,7 @@ import { HistoriesEntity } from './histories.entity';
 import { MessageChatEntity } from './message-chats.entity';
 import { PetsEntity } from './pets.entity';
 import { ProceedPetExchangesEntity } from './proceed-pet-exchanges';
+import { ReviewEntity } from './reviews.entity';
 
 @Entity({
   name: 'users',
@@ -46,6 +47,9 @@ export class UsersEntity {
 
   @OneToMany(() => ProceedPetExchangesEntity, (proceed) => proceed.seller)
   proceedPetExchangeSellers: ProceedPetExchangesEntity[];
+
+  @OneToMany(() => ReviewEntity, (review) => review.user)
+  reviews: ReviewEntity[];
 
   @CreateDateColumn({ name: 'created_at' })
   @Transform(dateTransformer)
