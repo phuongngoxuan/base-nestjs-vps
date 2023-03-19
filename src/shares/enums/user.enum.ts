@@ -1,5 +1,12 @@
-import { enumize } from 'src/shares/enums/enumize';
+export enum UserStatus {
+  ACTIVE = 'ACTIVE',
+  DEACTIVE = 'DEACTIVE',
+  LOCKED = 'LOCKED',
+}
 
-export const UserStatus = enumize('ACTIVE', 'DEACTIVE', 'LOCKED');
-
-export const UserRole = enumize('USER', 'ADMIN', 'SUPER_ADMIN', 'MOD');
+export enum UserRole {
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+  SUPER_ADMIN = 'SUPER_ADMIN',
+  MOD = 'MOD',
+}

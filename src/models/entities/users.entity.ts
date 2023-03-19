@@ -15,12 +15,19 @@ export class UsersEntity {
   id: number;
 
   @Column()
+  name: string;
+
+  @Column()
+  @Expose()
+  address: string;
+
+  @Column()
   @Expose()
   email: string;
 
   @Column()
   @Expose()
-  address: string;
+  password: string;
 
   @Column()
   @Expose()

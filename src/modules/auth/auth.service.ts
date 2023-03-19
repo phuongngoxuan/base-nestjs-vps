@@ -1,18 +1,24 @@
-import { CACHE_MANAGER, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  BadRequestException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Cache } from 'cache-manager';
-import { createHash } from 'crypto';
-import { UsersEntity } from 'src/models/entities/users.entity';
 import { AUTH_CACHE_PREFIX, jwtConstants } from 'src/modules/auth/auth.constants';
 import { LoginDto } from 'src/modules/auth/dto/login.dto';
-import { RefreshAccessTokenDto } from 'src/modules/auth/dto/refresh-access-token.dto';
 import { ResponseLogin } from 'src/modules/auth/dto/response-login.dto';
-import { JwtPayload } from 'src/modules/auth/strategies/jwt.payload';
 import { UserService } from 'src/modules/user/users.service';
 import { httpErrors } from 'src/shares/exceptions';
-import { checkRecoverSameAddress } from 'src/shares/helpers/utils';
-import { v4 as uuidv4 } from 'uuid';
-import { UserRole } from '../../shares/enums/user.enum';
+import * as bcrypt from 'bcryptjs';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserRepository } from '../../models/repositories/users.repository';
+import { ResponseRefreshTokenDto } from './dto/response-refresh-token.dto';
+import { UserRefreshTokenDto } from './dto/user-refresh-token.dto';
 
 @Injectable()
 export class AuthService {
@@ -20,76 +26,90 @@ export class AuthService {
     private userService: UserService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private jwtService: JwtService,
+    @InjectRepository(UserRepository, 'report') private usersRepositoryReport: UserRepository,
   ) {}
 
   async login(loginDto: LoginDto): Promise<ResponseLogin> {
-    const checkMessage = await checkRecoverSameAddress({
-      address: loginDto.address,
-      message: loginDto.message,
-      signature: loginDto.signature,
-    });
-    if (!checkMessage) {
-      throw new HttpException(httpErrors.ACCOUNT_HASH_NOT_MATCH, HttpStatus.BAD_REQUEST);
+    const { email, password } = loginDto;
+
+    // verify user email
+    const user = await this.usersRepositoryReport.findOne({ email });
+    if (!user) {
+      throw new BadRequestException(httpErrors.ACCOUNT_NOT_FOUND);
     }
 
-    const user: UsersEntity = await this.userService.findUserByAddress(loginDto.address);
+    // verify user password
+    if (!(await bcrypt.compare(password, user.password))) {
+      throw new UnauthorizedException(httpErrors.UNAUTHORIZED);
+    }
 
-    const role = user?.role || null;
-    if (role !== UserRole.ADMIN) throw new HttpException(httpErrors.FORBIDDEN, HttpStatus.FORBIDDEN);
-
-    const accessToken = this.generateAccessToken({ userId: user.id });
-    const refreshToken = await this.generateRefreshToken(accessToken.accessToken);
+    const [accessToken, refreshToken] = await Promise.all([
+      this.generateAccessToken(user.id),
+      this.generateRefreshToken(user.id),
+    ]);
 
     return {
-      ...accessToken,
-      ...refreshToken,
-      ...user,
+      accessToken,
+      refreshToken,
+      iat: Date.now(),
+      exp: Date.now() + jwtConstants.accessTokenExpiry,
     };
   }
 
-  async refreshAccessToken(refreshAccessTokenDto: RefreshAccessTokenDto): Promise<ResponseLogin> {
-    const { refreshToken, accessToken } = refreshAccessTokenDto;
-    const oldHashAccessToken = await this.cacheManager.get<string>(`${AUTH_CACHE_PREFIX}${refreshToken}`);
-    if (!oldHashAccessToken) throw new HttpException(httpErrors.REFRESH_TOKEN_EXPIRED, HttpStatus.BAD_REQUEST);
+  async refreshAccessToken(user: UserRefreshTokenDto): Promise<ResponseRefreshTokenDto> {
+    const { refreshToken, userId } = user;
 
-    const hashAccessToken = createHash('sha256').update(accessToken).digest('hex');
-    if (hashAccessToken == oldHashAccessToken) {
-      const oldPayload = await this.decodeAccessToken(accessToken);
-      delete oldPayload.iat;
-      delete oldPayload.exp;
-      const newAccessToken = this.generateAccessToken(oldPayload);
-      const newRefreshToken = await this.generateRefreshToken(newAccessToken.accessToken);
-      await this.cacheManager.del(`${AUTH_CACHE_PREFIX}${refreshToken}`);
+    const oldRefreshToken = await this.cacheManager.get<string>(`${AUTH_CACHE_PREFIX}${userId}`);
+    if (!oldRefreshToken) throw new HttpException(httpErrors.REFRESH_TOKEN_EXPIRED, HttpStatus.BAD_REQUEST);
+
+    if (refreshToken === oldRefreshToken) {
+      const [newAccessToken, newRefreshToken] = await Promise.all([
+        this.generateAccessToken(userId),
+        this.generateRefreshToken(userId),
+      ]);
       return {
-        ...newAccessToken,
-        ...newRefreshToken,
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
+        iat: Date.now(),
+        exp: Date.now() + jwtConstants.accessTokenExpiry,
       };
     } else throw new HttpException(httpErrors.REFRESH_TOKEN_EXPIRED, HttpStatus.BAD_REQUEST);
   }
 
-  generateAccessToken(payload: JwtPayload): { accessToken: string } {
-    return {
-      accessToken: this.jwtService.sign(payload),
-    };
+  async generateAccessToken(userId: number): Promise<string> {
+    return this.jwtService.signAsync(
+      {
+        userId,
+        date: Date.now(),
+      },
+      {
+        secret: jwtConstants.accessTokenSecret,
+        expiresIn: jwtConstants.accessTokenExpiry,
+      },
+    );
   }
 
-  async generateRefreshToken(accessToken: string): Promise<{ refreshToken: string }> {
-    const refreshToken = uuidv4();
-    const hashedAccessToken = createHash('sha256').update(accessToken).digest('hex');
-    await this.cacheManager.set<string>(`${AUTH_CACHE_PREFIX}${refreshToken}`, hashedAccessToken, {
+  async generateRefreshToken(userId: number): Promise<string> {
+    const refreshToken = await this.jwtService.signAsync(
+      {
+        userId,
+        date: Date.now(),
+      },
+      {
+        secret: jwtConstants.refreshTokenSecret,
+        expiresIn: jwtConstants.refreshTokenExpiry,
+      },
+    );
+
+    await this.cacheManager.set<string>(`${AUTH_CACHE_PREFIX}${userId}`, refreshToken, {
       ttl: jwtConstants.refreshTokenExpiry,
     });
-    return {
-      refreshToken: refreshToken,
-    };
-  }
 
-  async verifyAccessToken(accessToken: string): Promise<Record<string, unknown>> {
-    return this.jwtService.verifyAsync(accessToken);
+    return refreshToken;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async decodeAccessToken(accessToken: string): Promise<JwtPayload | any> {
+  async decodeAccessToken(accessToken: string): Promise<any> {
     return this.jwtService.decode(accessToken);
   }
 }

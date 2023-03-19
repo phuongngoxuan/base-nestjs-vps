@@ -3,8 +3,7 @@ import { QueryUserHistoryDto } from './dto/query-history-user.dto';
 import { ResHistoriesDto } from './dto/response-history.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HistoriesRepository } from '../../models/repositories/histories.repository';
-import { TransactionCrawlDto } from '../crawler/dto/transaction-crawl.dto';
-import { CreateHistoryTranDto } from './dto/create-history-tran.dto';
+
 @Injectable()
 export class HistoryService {
   constructor(
@@ -39,20 +38,5 @@ export class HistoryService {
         lastPage: Math.ceil(total / limit),
       },
     };
-  }
-
-  async createHistoryViaTransaction(transaction: TransactionCrawlDto, createHistoryTranDto: CreateHistoryTranDto) {
-    return await transaction.transactionRepositoryHistory.save({
-      action: createHistoryTranDto.action,
-      blockNumber: createHistoryTranDto.blockNumber,
-      blockTimestamp: createHistoryTranDto.blockTimestamp,
-      to: createHistoryTranDto.to,
-      from: createHistoryTranDto.from,
-      logIndex: createHistoryTranDto.logIndex,
-      txHash: createHistoryTranDto.txHash,
-      userId: createHistoryTranDto.userId,
-      poolId: createHistoryTranDto.poolId,
-      data: createHistoryTranDto.data,
-    });
   }
 }

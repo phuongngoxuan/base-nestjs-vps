@@ -47,6 +47,7 @@
     "@socket.io/redis-emitter": "4.1.0",
     "@types/ioredis": "4.28.10",
     "bcrypt": "5.0.1",
+    "bcryptjs": "^2.4.3",
     "bignumber.js": "9.1.0",
     "bull": "3.22.7",
     "cache-manager": "3.4.3",

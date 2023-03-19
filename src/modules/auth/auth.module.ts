@@ -1,23 +1,18 @@
 import { CacheModule, Module } from '@nestjs/common';
-import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from 'src/modules/user/users.module';
-import { jwtConstants } from 'src/modules/auth/auth.constants';
 import { AuthService } from 'src/modules/auth/auth.service';
-import { JwtStrategy } from 'src/modules/auth/strategies/jwt.strategy';
 import { AuthController } from 'src/modules/auth/auth.controller';
 import * as redisStore from 'cache-manager-redis-store';
 import { redisConfig } from 'src/configs/redis.config';
 import { MailModule } from 'src/modules/mail/mail.module';
+import { RtStrategy } from './strategies/rt.strategy';
+import { AtStrategy } from './strategies/at.strategy';
 
 @Module({
   imports: [
     UsersModule,
-    PassportModule,
-    JwtModule.register({
-      secret: jwtConstants.accessTokenSecret,
-      signOptions: { expiresIn: jwtConstants.accessTokenExpiry },
-    }),
+    JwtModule.register({}),
     CacheModule.register({
       store: redisStore,
       ...redisConfig,
@@ -25,8 +20,8 @@ import { MailModule } from 'src/modules/mail/mail.module';
     }),
     MailModule,
   ],
-  providers: [AuthService, JwtStrategy],
-  exports: [AuthService],
   controllers: [AuthController],
+  providers: [AuthService, AtStrategy, RtStrategy],
+  exports: [AuthService],
 })
 export class AuthModule {}
