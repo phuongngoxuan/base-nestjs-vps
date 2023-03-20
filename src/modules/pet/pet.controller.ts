@@ -22,6 +22,15 @@ export class PetController {
     return this.petService.findAll(getPetsDto);
   }
 
+  @Get('my-pet')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'get my pet.' })
+  @UseGuards(AtGuards)
+  @ApiOkResponse()
+  async findMyPet(@GetCurrentUser() user: CurrentUsersDto, @Query() getPetsDto: GetPetsDto): Promise<GetPetListRes> {
+    return this.petService.findAll(getPetsDto, user.userId);
+  }
+
   @Post()
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create new pet.' })
@@ -55,7 +64,7 @@ export class PetController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete pet.' })
   @UseGuards(AtGuards)
-  async remove(@GetCurrentUser() user: CurrentUsersDto,@Param('id') id: number): Promise<void> {
-    await this.petService.remove(id,user.userId);
+  async remove(@GetCurrentUser() user: CurrentUsersDto, @Param('id') id: number): Promise<void> {
+    await this.petService.remove(id, user.userId);
   }
 }

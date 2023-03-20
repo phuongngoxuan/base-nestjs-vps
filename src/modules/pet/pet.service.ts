@@ -19,8 +19,8 @@ export class PetService {
     @InjectRepository(PetsRepository, 'report') private petVendorsRepositoryReport: PetVendorsRepository,
   ) {}
 
-  async findAll(getPetsDto: GetPetsDto): Promise<GetPetListRes> {
-    return this.petsRepositoryMaster.getPets(getPetsDto);
+  async findAll(getPetsDto: GetPetsDto, userId?: number): Promise<GetPetListRes> {
+    return this.petsRepositoryMaster.getPets(getPetsDto,userId);
   }
 
   async create(userId: number, petDto: CreatePetDto): Promise<PetsEntity> {
@@ -67,6 +67,6 @@ export class PetService {
       throw new BadRequestException(httpErrors.PET_NOT_FOUND);
     }
 
-    await this.petsRepositoryMaster.delete({ id: petId, petOwnerId: userId });
+    await this.petsRepositoryMaster.update({ id: petId, petOwnerId: userId }, {deleteFlg: true});
   }
 }

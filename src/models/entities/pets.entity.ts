@@ -56,6 +56,11 @@ export class PetsEntity {
   })
   isAvailable: boolean;
 
+  @Column({
+    name: 'delete_flg',
+  })
+  deleteFlg: boolean;
+
   @CreateDateColumn({ name: 'created_at' })
   @Transform(dateTransformer)
   createdAt: Date;

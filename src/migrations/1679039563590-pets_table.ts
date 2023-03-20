@@ -62,7 +62,14 @@ export class petsTable1679039563590 implements MigrationInterface {
           {
             name: 'is_available',
             type: 'boolean',
-            isNullable: true,
+            isNullable: false,
+            default: true,
+          },
+          {
+            name: 'delete_flg',
+            type: 'boolean',
+            isNullable: false,
+            default: false,
           },
           {
             name: 'created_at',

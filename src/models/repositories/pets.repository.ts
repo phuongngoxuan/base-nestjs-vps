@@ -5,9 +5,12 @@ import { PetsEntity } from '../entities/pets.entity';
 
 @EntityRepository(PetsEntity)
 export class PetsRepository extends Repository<PetsEntity> {
-  async getPets(getPetsDto: GetPetsDto): Promise<GetPetListRes> {
+  async getPets(getPetsDto: GetPetsDto, userId?: number): Promise<GetPetListRes> {
     const { sort, page, limit } = getPetsDto;
     const qb = this.createQueryBuilder('pets');
+    if (userId) {
+      qb.where('pets.pet_owner_id = :pet_owner_id', { pet_owner_id: userId });
+    }
     const skip = (page - 1) * limit;
     const [pets, count] = await qb.skip(skip).take(limit).orderBy('pets.createdAt', sort).getManyAndCount();
 
