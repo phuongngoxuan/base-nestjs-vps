@@ -42,9 +42,6 @@ export class ReviewEntity {
   @Transform(dateTransformer)
   updatedAt: Date;
 
-
-  // todo create relation ship 
-
   @ManyToOne(() => UsersEntity, (user) => user.reviews, {
     onDelete: 'CASCADE',
   })

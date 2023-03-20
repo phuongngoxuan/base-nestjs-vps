@@ -15,12 +15,19 @@ export class UsersEntity {
   id: number;
 
   @Column()
+  name: string;
+
+  @Column()
+  @Expose()
+  address: string;
+
+  @Column()
   @Expose()
   email: string;
 
   @Column()
   @Expose()
-  address: string;
+  password: string;
 
   @Column()
   @Expose()
@@ -39,7 +46,7 @@ export class UsersEntity {
   @OneToMany(() => MessageChatEntity, (message) => message.receiver)
   message_receivers: MessageChatEntity[];
 
-  @OneToMany(() => PetsEntity, (pet) => pet.user)
+  @OneToMany(() => PetsEntity, (pet) => pet.petOwner)
   pets: PetsEntity[];
 
   @OneToMany(() => ProceedPetExchangesEntity, (proceed) => proceed.buyer)

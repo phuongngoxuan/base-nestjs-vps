@@ -1,6 +1,6 @@
 import { UsersEntity } from 'src/models/entities/users.entity';
 import { GetUsersDto } from 'src/modules/user/dto/get-users.dto';
-import { UserList } from 'src/shares/interface/paging-response.interface';
+import { GetUserListRes } from 'src/shares/interface/paging-response.interface';
 import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(UsersEntity)
@@ -16,7 +16,7 @@ export class UserRepository extends Repository<UsersEntity> {
     } else return null;
   }
 
-  async getUsers(getUser: GetUsersDto): Promise<UserList> {
+  async getUsers(getUser: GetUsersDto): Promise<GetUserListRes> {
     const { sort, page, limit } = getUser;
     const qb = this.createQueryBuilder('users');
     const skip = (page - 1) * limit;

@@ -48,7 +48,7 @@ export class petsTable1679039563590 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'user_id',
+            name: 'pet_owner_id',
             type: 'int',
             unsigned: true,
             isNullable: false,
@@ -63,6 +63,13 @@ export class petsTable1679039563590 implements MigrationInterface {
             name: 'is_available',
             type: 'boolean',
             isNullable: false,
+            default: true,
+          },
+          {
+            name: 'delete_flg',
+            type: 'boolean',
+            isNullable: false,
+            default: false,
           },
           {
             name: 'created_at',
@@ -83,7 +90,7 @@ export class petsTable1679039563590 implements MigrationInterface {
     await queryRunner.createForeignKey(
       'pets',
       new TableForeignKey({
-        columnNames: ['user_id'],
+        columnNames: ['pet_owner_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'users',
         onDelete: 'CASCADE',
@@ -95,9 +102,9 @@ export class petsTable1679039563590 implements MigrationInterface {
     const table = await queryRunner.getTable('pets');
 
     // Drop FK user
-    const foreignKeyUser = table.foreignKeys.find((fk) => fk.columnNames.indexOf('user_id') !== -1);
-    await queryRunner.dropForeignKey('user_id', foreignKeyUser);
-    await queryRunner.dropColumn('pets', 'user_id');
+    const foreignKeyUser = table.foreignKeys.find((fk) => fk.columnNames.indexOf('pet_owner_id') !== -1);
+    await queryRunner.dropForeignKey('pet_owner_id', foreignKeyUser);
+    await queryRunner.dropColumn('pets', 'pet_owner_id');
 
     await queryRunner.dropTable('pets');
   }

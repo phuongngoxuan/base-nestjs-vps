@@ -14,7 +14,6 @@ import { MailModule } from 'src/modules/mail/mail.module';
 import { UsersModule } from 'src/modules/user/users.module';
 import { HttpClientModule } from 'src/shares/http-clients/http.module';
 import { KafkaModule } from 'src/shares/kafka-client/kafka-module';
-import { CrawlerModule } from './modules/crawler/crawler.module';
 import { ReadScModule } from './modules/read-sc/read-sc.module';
 import { HistoryModule } from './modules/history/history.module';
 import { SeederModule } from './modules/seeder/seeder.module';
@@ -41,7 +40,6 @@ const Modules = [
   UsersModule,
   MailModule,
   HelloKafka,
-  CrawlerModule,
   ReadScModule,
   HistoryModule,
   SeederModule,
