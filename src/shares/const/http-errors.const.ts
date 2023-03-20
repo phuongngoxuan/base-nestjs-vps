@@ -58,4 +58,16 @@ export const httpErrors = {
     message: 'This setting does not valid.',
     code: 'SETTING_00002',
   },
+
+  // pet
+  PET_NOT_FOUND: {
+    message: 'This pet does not exist.',
+    code: 'PET_00001',
+  },
+
+  // pet vendor
+  PET_VENDOR_NOT_FOUND: {
+    message: 'This pet vendor does not exist.',
+    code: 'PET_VENDOR_00001',
+  },
 };

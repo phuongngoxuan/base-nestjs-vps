@@ -13,7 +13,7 @@ import { AUTH_CACHE_PREFIX, jwtConstants } from 'src/modules/auth/auth.constants
 import { LoginDto } from 'src/modules/auth/dto/login.dto';
 import { ResponseLogin } from 'src/modules/auth/dto/response-login.dto';
 import { UserService } from 'src/modules/user/users.service';
-import { httpErrors } from 'src/shares/exceptions';
+import { httpErrors } from 'src/shares/const/http-errors.const';
 import * as bcrypt from 'bcryptjs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from '../../models/repositories/users.repository';

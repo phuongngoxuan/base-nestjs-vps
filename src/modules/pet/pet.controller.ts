@@ -1,49 +1,61 @@
-import { Controller, Body, Get, Param, Post, Put, Query } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Controller, Body, Get, Param, Post, Put, Query, HttpCode, UseGuards, Delete } from '@nestjs/common';
+import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PetsEntity } from 'src/models/entities/pets.entity';
+import { GetCurrentUser } from 'src/shares/decorators/get-current-user.decorators';
+import { CurrentUsersDto } from 'src/shares/dtos/current-user.dto';
 import { GetPetListRes } from 'src/shares/interface/paging-response.interface';
+import { AtGuards } from '../auth/guards';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { GetPetsDto } from './dto/get-pets.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
 import { PetService } from './pet.service';
 
 @Controller('pet')
+@ApiTags('Pet')
 export class PetController {
   constructor(private petService: PetService) {}
 
   @Get()
-  @ApiOperation({ summary: 'get all user.' })
-  @ApiResponse({ status: 200, description: 'Get all user.' })
+  @ApiOperation({ summary: 'get all pet.' })
+  @ApiOkResponse()
   async findAll(@Query() getPetsDto: GetPetsDto): Promise<GetPetListRes> {
     return this.petService.findAll(getPetsDto);
   }
 
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create new pet.' })
-  @ApiCreatedResponse({ description: 'The user has been successfully created', type: CreatePetDto })
-  async create(@Body() createPetDto: CreatePetDto): Promise<PetsEntity> {
-    return this.petService.create(createPetDto);
+  @UseGuards(AtGuards)
+  @ApiCreatedResponse()
+  async create(@GetCurrentUser() user: CurrentUsersDto, @Body() createPetDto: CreatePetDto): Promise<PetsEntity> {
+    return this.petService.create(user.userId, createPetDto);
   }
 
   @Put(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update pet.' })
-  @ApiResponse({ status: 200, description: 'Update a pet.' })
+  @UseGuards(AtGuards)
+  @HttpCode(204)
   async update(
+    @GetCurrentUser() user: CurrentUsersDto,
     @Param('id') id: number,
     @Body() updatePetDto: UpdatePetDto,
   ): Promise<PetsEntity> {
-    return this.petService.update(id, updatePetDto);
+    return this.petService.update(id, updatePetDto, user.userId);
   }
 
-  // @ApiResponse({ status: 200, description: 'Get a pet by ID.' })
-  // @Get(':id')
-  // async findOne(@Param('id') id: string): Promise<Pet> {
-  //   return this.petService.findOne(id);
-  // }
+  @Get(':id')
+  @ApiOperation({ summary: 'Get pet by id.' })
+  @ApiOkResponse()
+  async findOne(@Param('id') id: number): Promise<PetsEntity> {
+    return this.petService.findById(id);
+  }
 
-  // @ApiResponse({ status: 204, description: 'Delete a pet.' })
-  // @Delete(':id')
-  // async remove(@Param('id') id: string): Promise<void> {
-  //   return this.petService.remove(id);
-  // }
+  @Delete(':id')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete pet.' })
+  @UseGuards(AtGuards)
+  async remove(@GetCurrentUser() user: CurrentUsersDto,@Param('id') id: number): Promise<void> {
+    await this.petService.remove(id,user.userId);
+  }
 }

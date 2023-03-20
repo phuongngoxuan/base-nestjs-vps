@@ -1,5 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { httpErrors } from 'src/shares/exceptions';
+import { httpErrors } from 'src/shares/const/http-errors.const';
 import { UsersEntity } from 'src/models/entities/users.entity';
 import { CreateUserDto } from 'src/modules/user/dto/create-user.dto';
 import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
