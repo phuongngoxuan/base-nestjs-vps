@@ -6,7 +6,7 @@ export class createUsersTable1645095329121 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'users',
+        name: 'user',
         columns: [
           {
             name: 'id',
@@ -88,7 +88,7 @@ export class createUsersTable1645095329121 implements MigrationInterface {
       }),
       true,
     );
-    await queryRunner.createIndices('users', [
+    await queryRunner.createIndices('user', [
       new TableIndex({
         columnNames: ['role'],
         isUnique: false,
@@ -113,6 +113,6 @@ export class createUsersTable1645095329121 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    if (await queryRunner.hasTable('users')) await queryRunner.dropTable('users');
+    if (await queryRunner.hasTable('user')) await queryRunner.dropTable('user');
   }
 }

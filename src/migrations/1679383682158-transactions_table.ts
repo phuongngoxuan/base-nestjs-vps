@@ -75,7 +75,7 @@ export class transactionsTable1679383682158 implements MigrationInterface {
       new TableForeignKey({
         columnNames: ['buyer_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'users',
+        referencedTableName: 'user',
         onDelete: 'CASCADE',
       }),
     );
@@ -85,7 +85,7 @@ export class transactionsTable1679383682158 implements MigrationInterface {
       new TableForeignKey({
         columnNames: ['seller_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'users',
+        referencedTableName: 'user',
         onDelete: 'CASCADE',
       }),
     );

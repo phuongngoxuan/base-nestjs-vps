@@ -54,7 +54,7 @@ export class messageChatsTable1679039271210 implements MigrationInterface {
       new TableForeignKey({
         columnNames: ['sender_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'users',
+        referencedTableName: 'user',
         onDelete: 'CASCADE',
       }),
     );
@@ -64,7 +64,7 @@ export class messageChatsTable1679039271210 implements MigrationInterface {
       new TableForeignKey({
         columnNames: ['receiver_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'users',
+        referencedTableName: 'user',
         onDelete: 'CASCADE',
       }),
     );
