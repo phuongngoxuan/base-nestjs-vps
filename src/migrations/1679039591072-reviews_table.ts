@@ -5,7 +5,7 @@ export class reviewsTable1679039591072 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'reviews',
+        name: 'review',
         columns: [
           {
             name: 'id',
@@ -23,7 +23,13 @@ export class reviewsTable1679039591072 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'pet_vendor_id',
+            name: 'pet_id',
+            type: 'int',
+            unsigned: true,
+            isNullable: false,
+          },
+          {
+            name: 'shop_id',
             type: 'int',
             unsigned: true,
             isNullable: false,
@@ -38,8 +44,8 @@ export class reviewsTable1679039591072 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'image_url',
-            type: 'varchar',
+            name: 'list_image',
+            type: 'json',
           },
           {
             name: 'created_at',
@@ -58,7 +64,7 @@ export class reviewsTable1679039591072 implements MigrationInterface {
     );
 
     await queryRunner.createForeignKey(
-      'reviews',
+      'review',
       new TableForeignKey({
         columnNames: ['user_id'],
         referencedColumnNames: ['id'],
@@ -68,29 +74,44 @@ export class reviewsTable1679039591072 implements MigrationInterface {
     );
 
     await queryRunner.createForeignKey(
-      'reviews',
+      'review',
       new TableForeignKey({
-        columnNames: ['pet_vendor_id'],
+        columnNames: ['pet_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'pet_vendors',
+        referencedTableName: 'pet',
+        onDelete: 'CASCADE',
+      }),
+    );
+
+    await queryRunner.createForeignKey(
+      'review',
+      new TableForeignKey({
+        columnNames: ['shop_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'users',
         onDelete: 'CASCADE',
       }),
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    const table = await queryRunner.getTable('reviews');
+    const table = await queryRunner.getTable('review');
 
     // Drop FK user
     const foreignKeyUser = table.foreignKeys.find((fk) => fk.columnNames.indexOf('user_id') !== -1);
     await queryRunner.dropForeignKey('user_id', foreignKeyUser);
-    await queryRunner.dropColumn('reviews', 'user_id');
+    await queryRunner.dropColumn('review', 'user_id');
 
-    // Drop FK pet vendor
-    const foreignKeyPetVendor = table.foreignKeys.find((fk) => fk.columnNames.indexOf('pet_vendor_id') !== -1);
-    await queryRunner.dropForeignKey('pet_vendor_id', foreignKeyPetVendor);
-    await queryRunner.dropColumn('reviews', 'pet_vendor_id');
+    // Drop FK pet
+    const foreignKeyPet = table.foreignKeys.find((fk) => fk.columnNames.indexOf('pet_id') !== -1);
+    await queryRunner.dropForeignKey('pet_id', foreignKeyPet);
+    await queryRunner.dropColumn('review', 'pet_id');
 
-    await queryRunner.dropTable('reviews');
+    // Drop FK shop
+    const foreignKeyShop = table.foreignKeys.find((fk) => fk.columnNames.indexOf('shop_id') !== -1);
+    await queryRunner.dropForeignKey('shop_id', foreignKeyShop);
+    await queryRunner.dropColumn('review', 'shop_id');
+
+    await queryRunner.dropTable('review');
   }
 }
