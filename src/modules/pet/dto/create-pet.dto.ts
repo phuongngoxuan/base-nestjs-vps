@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsInt, IsNumber } from 'class-validator';
+import { IsString, IsInt } from 'class-validator';
 
 export class CreatePetDto {
   @ApiProperty({
@@ -54,16 +54,8 @@ export class CreatePetDto {
 
   @ApiProperty({
     required: true,
-    example: 1,
-  })
-  @IsInt()
-  petOwnerId: number;
-
-  @ApiProperty({
-    required: true,
     example: '3000000',
   })
-  @IsNumber()
   price: string;
 
   @ApiProperty({
@@ -89,9 +81,9 @@ export class CreatePetDto {
 
   @ApiProperty({
     required: true,
-    example: '',
+    example: '{}',
   })
-  listImage: string;
+  listImage?: string = '{}';
 
   @ApiProperty({
     required: true,

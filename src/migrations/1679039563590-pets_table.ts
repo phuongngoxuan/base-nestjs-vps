@@ -84,7 +84,6 @@ export class petsTable1679039563590 implements MigrationInterface {
           {
             name: 'list_image',
             type: 'json',
-            isNullable: false,
           },
           {
             name: 'health',

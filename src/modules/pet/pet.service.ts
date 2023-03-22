@@ -22,7 +22,7 @@ export class PetService {
   }
 
   async create(userId: number, petDto: CreatePetDto): Promise<PetEntity> {
-    return this.petsRepositoryMaster.save({ ...petDto });
+    return this.petsRepositoryMaster.save({ ...petDto, petOwnerId: userId });
   }
 
   async update(id: number, petDto: UpdatePetDto, userId: number): Promise<PetEntity> {
