@@ -6,7 +6,7 @@ export class createUsersTable1645095329121 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'users',
+        name: 'user',
         columns: [
           {
             name: 'id',
@@ -15,6 +15,11 @@ export class createUsersTable1645095329121 implements MigrationInterface {
             isGenerated: true,
             generationStrategy: 'increment',
             unsigned: true,
+          },
+          {
+            name: 'type',
+            type: 'varchar',
+            isNullable: true,
           },
           {
             name: 'name',
@@ -37,6 +42,11 @@ export class createUsersTable1645095329121 implements MigrationInterface {
             isNullable: false,
           },
           {
+            name: 'card_info',
+            type: 'json',
+            isNullable: false,
+          },
+          {
             name: 'role',
             type: 'varchar(20)',
             isNullable: false,
@@ -48,6 +58,21 @@ export class createUsersTable1645095329121 implements MigrationInterface {
             type: 'varchar(20)',
             default: `'${UserStatus.ACTIVE}'`,
             comment: Object.keys(UserStatus).join(','),
+          },
+          {
+            name: 'is_verify',
+            type: 'boolean',
+            isNullable: false,
+          },
+          {
+            name: 'balance',
+            type: 'DECIMAL(50,5)',
+            isNullable: false,
+          },
+          {
+            name: 'image_url',
+            type: 'varchar',
+            isNullable: false,
           },
           {
             name: 'created_at',
@@ -63,7 +88,7 @@ export class createUsersTable1645095329121 implements MigrationInterface {
       }),
       true,
     );
-    await queryRunner.createIndices('users', [
+    await queryRunner.createIndices('user', [
       new TableIndex({
         columnNames: ['role'],
         isUnique: false,
@@ -88,6 +113,6 @@ export class createUsersTable1645095329121 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    if (await queryRunner.hasTable('users')) await queryRunner.dropTable('users');
+    if (await queryRunner.hasTable('user')) await queryRunner.dropTable('user');
   }
 }

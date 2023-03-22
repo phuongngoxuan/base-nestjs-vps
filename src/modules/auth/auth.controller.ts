@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { UsersEntity } from 'src/models/entities/users.entity';
+import { UserEntity } from 'src/models/entities/users.entity';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { LoginDto } from 'src/modules/auth/dto/login.dto';
 import { ResponseLogin } from 'src/modules/auth/dto/response-login.dto';
@@ -26,7 +26,7 @@ export class AuthController {
 
   @Get('/current')
   @UseGuards(AtGuards)
-  async currentUser(@UserID() userId: number): Promise<ResponseDto<UsersEntity>> {
+  async currentUser(@UserID() userId: number): Promise<ResponseDto<UserEntity>> {
     const user = await this.userService.findUserById(userId);
     return {
       data: user,

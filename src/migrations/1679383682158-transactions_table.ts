@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
 
-export class proceedPetExchangesTable1679039736471 implements MigrationInterface {
-  name = 'proceedPetExchangesTable1679039736471';
+export class transactionsTable1679383682158 implements MigrationInterface {
+  name = 'transactionsTable1679383682158';
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'proceed_pet_exchanges',
+        name: 'transaction',
         columns: [
           {
             name: 'id',
@@ -35,19 +35,13 @@ export class proceedPetExchangesTable1679039736471 implements MigrationInterface
             isNullable: false,
           },
           {
-            name: 'pet_vendor_id',
-            type: 'int',
-            unsigned: true,
+            name: 'price',
+            type: 'DECIMAL(40,5)',
             isNullable: false,
           },
           {
             name: 'status',
             type: 'varchar',
-            isNullable: false,
-          },
-          {
-            name: 'transaction_value',
-            type: 'decimal(20,2)',
             isNullable: false,
           },
           {
@@ -67,41 +61,31 @@ export class proceedPetExchangesTable1679039736471 implements MigrationInterface
     );
 
     await queryRunner.createForeignKey(
-      'proceed_pet_exchanges',
+      'transaction',
       new TableForeignKey({
         columnNames: ['pet_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'pets',
+        referencedTableName: 'pet',
         onDelete: 'CASCADE',
       }),
     );
 
     await queryRunner.createForeignKey(
-      'proceed_pet_exchanges',
+      'transaction',
       new TableForeignKey({
         columnNames: ['buyer_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'users',
+        referencedTableName: 'user',
         onDelete: 'CASCADE',
       }),
     );
 
     await queryRunner.createForeignKey(
-      'proceed_pet_exchanges',
+      'transaction',
       new TableForeignKey({
         columnNames: ['seller_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'users',
-        onDelete: 'CASCADE',
-      }),
-    );
-
-    await queryRunner.createForeignKey(
-      'proceed_pet_exchanges',
-      new TableForeignKey({
-        columnNames: ['pet_vendor_id'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'pet_vendors',
+        referencedTableName: 'user',
         onDelete: 'CASCADE',
       }),
     );
@@ -124,11 +108,6 @@ export class proceedPetExchangesTable1679039736471 implements MigrationInterface
     const foreignKeySeller = table.foreignKeys.find((fk) => fk.columnNames.indexOf('seller_id') !== -1);
     await queryRunner.dropForeignKey('seller_id', foreignKeySeller);
     await queryRunner.dropColumn('proceed_pet_exchanges', 'seller_id');
-
-    // Drop FK pet vendor
-    const foreignKeyUser = table.foreignKeys.find((fk) => fk.columnNames.indexOf('pet_vendor_id') !== -1);
-    await queryRunner.dropForeignKey('pet_vendor_id', foreignKeyUser);
-    await queryRunner.dropColumn('proceed_pet_exchanges', 'pet_vendor_id');
 
     await queryRunner.dropTable('proceed_pet_exchanges');
   }

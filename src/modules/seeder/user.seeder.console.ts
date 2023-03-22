@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Command, Console } from 'nestjs-console';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserRepository } from '../../models/repositories/users.repository';
+import { UserRepository } from '../../models/repositories/user.repository';
 import { listUserInfos } from './data/user-info.seeder';
 
 @Console()

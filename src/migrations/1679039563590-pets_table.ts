@@ -5,7 +5,7 @@ export class petsTable1679039563590 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'pets',
+        name: 'pet',
         columns: [
           {
             name: 'id',
@@ -33,6 +33,11 @@ export class petsTable1679039563590 implements MigrationInterface {
             isNullable: false,
           },
           {
+            name: 'color',
+            type: 'varchar(50)',
+            isNullable: false,
+          },
+          {
             name: 'breed',
             type: 'varchar(50)',
             isNullable: false,
@@ -54,22 +59,52 @@ export class petsTable1679039563590 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'pet_vendor_id',
+            name: 'price',
+            type: 'DECIMAL(40,5)',
+            isNullable: false,
+          },
+          {
+            name: 'shop_id',
             type: 'int',
             unsigned: true,
             isNullable: false,
           },
           {
-            name: 'is_available',
-            type: 'boolean',
+            name: 'dad_pet_id',
+            type: 'int',
+            unsigned: true,
             isNullable: false,
-            default: true,
           },
           {
-            name: 'delete_flg',
+            name: 'mother_pet_id',
+            type: 'int',
+            unsigned: true,
+            isNullable: false,
+          },
+          {
+            name: 'list_image',
+            type: 'json',
+          },
+          {
+            name: 'health',
+            type: 'text',
+            isNullable: false,
+          },
+          {
+            name: 'status',
+            type: 'text',
+            isNullable: false,
+          },
+          {
+            name: 'is_deleted',
             type: 'boolean',
             isNullable: false,
             default: false,
+          },
+          {
+            name: 'updated_by',
+            type: 'int',
+            isNullable: false,
           },
           {
             name: 'created_at',
@@ -88,24 +123,69 @@ export class petsTable1679039563590 implements MigrationInterface {
     );
 
     await queryRunner.createForeignKey(
-      'pets',
+      'pet',
       new TableForeignKey({
         columnNames: ['pet_owner_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'users',
+        referencedTableName: 'user',
         onDelete: 'CASCADE',
       }),
     );
+
+    await queryRunner.createForeignKey(
+      'pet',
+      new TableForeignKey({
+        columnNames: ['shop_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'user',
+        onDelete: 'CASCADE',
+      }),
+    );
+
+    // await queryRunner.createForeignKey(
+    //   'pet',
+    //   new TableForeignKey({
+    //     columnNames: ['dad_pet_id'],
+    //     referencedColumnNames: ['id'],
+    //     referencedTableName: 'pet',
+    //     onDelete: 'CASCADE',
+    //   }),
+    // );
+
+    // await queryRunner.createForeignKey(
+    //   'pet',
+    //   new TableForeignKey({
+    //     columnNames: ['mother_pet_id'],
+    //     referencedColumnNames: ['id'],
+    //     referencedTableName: 'pet',
+    //     onDelete: 'CASCADE',
+    //   }),
+    // );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    const table = await queryRunner.getTable('pets');
+    const table = await queryRunner.getTable('pet');
 
-    // Drop FK user
-    const foreignKeyUser = table.foreignKeys.find((fk) => fk.columnNames.indexOf('pet_owner_id') !== -1);
-    await queryRunner.dropForeignKey('pet_owner_id', foreignKeyUser);
-    await queryRunner.dropColumn('pets', 'pet_owner_id');
+    // Drop FK Pet Owner
+    const foreignKeyPetOwner = table.foreignKeys.find((fk) => fk.columnNames.indexOf('pet_owner_id') !== -1);
+    await queryRunner.dropForeignKey('pet_owner_id', foreignKeyPetOwner);
+    await queryRunner.dropColumn('pet', 'pet_owner_id');
 
-    await queryRunner.dropTable('pets');
+    // Drop FK Shop
+    const foreignKeyShop = table.foreignKeys.find((fk) => fk.columnNames.indexOf('shop_id') !== -1);
+    await queryRunner.dropForeignKey('shop_id', foreignKeyShop);
+    await queryRunner.dropColumn('pet', 'shop_id');
+
+    // // Drop FK Dad Pet
+    // const foreignKeyDadPet = table.foreignKeys.find((fk) => fk.columnNames.indexOf('dad_pet_id') !== -1);
+    // await queryRunner.dropForeignKey('dad_pet_id', foreignKeyDadPet);
+    // await queryRunner.dropColumn('pet', 'dad_pet_id');
+
+    // // Drop FK Mother Pet
+    // const foreignKeyMotherPet = table.foreignKeys.find((fk) => fk.columnNames.indexOf('mother_pet_id') !== -1);
+    // await queryRunner.dropForeignKey('mother_pet_id', foreignKeyMotherPet);
+    // await queryRunner.dropColumn('pet', 'mother_pet_id');
+
+    await queryRunner.dropTable('pet');
   }
 }

@@ -1,9 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PetsEntity } from 'src/models/entities/pets.entity';
-import { PetVendorsRepository } from 'src/models/repositories/pet-vendors.repository';
-import { PetsRepository } from 'src/models/repositories/pets.repository';
-import { UserRepository } from 'src/models/repositories/users.repository';
+import { PetEntity } from 'src/models/entities/pet.entity';
+import { PetsRepository } from 'src/models/repositories/pet.repository';
+import { UserRepository } from 'src/models/repositories/user.repository';
 import { httpErrors } from 'src/shares/const/http-errors.const';
 import { GetPetListRes } from 'src/shares/interface/paging-response.interface';
 import { CreatePetDto } from './dto/create-pet.dto';
@@ -16,24 +15,18 @@ export class PetService {
     @InjectRepository(PetsRepository, 'master') private petsRepositoryMaster: PetsRepository,
     @InjectRepository(PetsRepository, 'report') private petsRepositoryReport: PetsRepository,
     @InjectRepository(PetsRepository, 'report') private userRepositoryReport: UserRepository,
-    @InjectRepository(PetsRepository, 'report') private petVendorsRepositoryReport: PetVendorsRepository,
   ) {}
 
   async findAll(getPetsDto: GetPetsDto, userId?: number): Promise<GetPetListRes> {
-    return this.petsRepositoryMaster.getPets(getPetsDto,userId);
+    return this.petsRepositoryMaster.getPets(getPetsDto, userId);
   }
 
-  async create(userId: number, petDto: CreatePetDto): Promise<PetsEntity> {
-    const petVendor = await this.petVendorsRepositoryReport.findOne({ id: petDto.pet_vendor_id });
-    if (!petVendor) {
-      throw new BadRequestException(httpErrors.PET_VENDOR_NOT_FOUND);
-    }
-
+  async create(userId: number, petDto: CreatePetDto): Promise<PetEntity> {
     return this.petsRepositoryMaster.save({ ...petDto, petOwnerId: userId });
   }
 
-  async update(id: number, petDto: UpdatePetDto, userId: number): Promise<PetsEntity> {
-    const { pet_owner_id, pet_vendor_id } = petDto;
+  async update(id: number, petDto: UpdatePetDto, userId: number): Promise<PetEntity> {
+    const { pet_owner_id } = petDto;
     const pet = await this.petsRepositoryReport.findOne({ id, petOwnerId: userId });
     if (!pet) {
       throw new BadRequestException();
@@ -44,15 +37,11 @@ export class PetService {
         throw new BadRequestException(httpErrors.ACCOUNT_NOT_FOUND);
       }
     }
-    if (pet_vendor_id) {
-      const petVendor = await this.petVendorsRepositoryReport.findOne({ id: pet_vendor_id });
-      if (!petVendor) throw new BadRequestException(httpErrors.PET_VENDOR_NOT_FOUND);
-    }
 
     return this.petsRepositoryMaster.save(petDto);
   }
 
-  async findById(id: number): Promise<PetsEntity> {
+  async findById(id: number): Promise<PetEntity> {
     const pet = await this.petsRepositoryReport.findOne({ id });
     if (!pet) {
       throw new BadRequestException(httpErrors.PET_NOT_FOUND);
@@ -67,6 +56,6 @@ export class PetService {
       throw new BadRequestException(httpErrors.PET_NOT_FOUND);
     }
 
-    await this.petsRepositoryMaster.update({ id: petId, petOwnerId: userId }, {deleteFlg: true});
+    await this.petsRepositoryMaster.update({ id: petId, petOwnerId: userId }, { isDeleted: true });
   }
 }

@@ -2,22 +2,22 @@ version: '3'
 services:
   mysql:
     image: mysql:8.0.25
-    container_name: pet-mysql
+    container_name: pet2-mysql2
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --sql_mode="" --default-authentication-plugin=mysql_native_password
     environment:
-      MYSQL_ROOT_PASSWORD: '1'
-      MYSQL_DATABASE: pet
-      MYSQL_USER: 'pet'
-      MYSQL_PASSWORD: '1'
+      MYSQL_ROOT_PASSWORD: '2'
+      MYSQL_DATABASE: pet2
+      MYSQL_USER: 'pet2'
+      MYSQL_PASSWORD: '2'
       LANG: C.UTF-8
     ports:
-      - 3315:3306
+      - 3310:3306
 
   redis:
     image: 'redis:6-alpine'
-    container_name: pet-redis
+    container_name: pet2-redis2
     ports:
-      - 6385:6379
+      - 6380:6379
 
   # zookeeper:
   #   image: 'bitnami/zookeeper:3.6.2'

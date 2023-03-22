@@ -1,10 +1,10 @@
 import { GetPetsDto } from 'src/modules/pet/dto/get-pets.dto';
 import { GetPetListRes } from 'src/shares/interface/paging-response.interface';
 import { EntityRepository, Repository } from 'typeorm';
-import { PetsEntity } from '../entities/pets.entity';
+import { PetEntity } from '../entities/pet.entity';
 
-@EntityRepository(PetsEntity)
-export class PetsRepository extends Repository<PetsEntity> {
+@EntityRepository(PetEntity)
+export class PetsRepository extends Repository<PetEntity> {
   async getPets(getPetsDto: GetPetsDto, userId?: number): Promise<GetPetListRes> {
     const { sort, page, limit } = getPetsDto;
     const qb = this.createQueryBuilder('pets');

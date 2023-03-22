@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/swagger';
-import { UsersEntity } from 'src/models/entities/users.entity';
+import { UserEntity } from 'src/models/entities/users.entity';
 
-export class ResponseLogin extends PartialType(UsersEntity) {
+export class ResponseLogin extends PartialType(UserEntity) {
   accessToken: string;
   refreshToken: string;
   iat: number;

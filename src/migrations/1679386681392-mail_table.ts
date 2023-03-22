@@ -1,19 +1,11 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class createUserInfoTable1645096252579 implements MigrationInterface {
-  name = 'createUserInfoTable1645096252579';
-  foreignKey = new TableForeignKey({
-    name: 'FK_user_info_user',
-    columnNames: ['user_id'],
-    referencedColumnNames: ['id'],
-    referencedTableName: 'users',
-    onDelete: 'CASCADE',
-  });
-
+export class mailTable1679386681392 implements MigrationInterface {
+  name = 'mailTable1679386681392';
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'user_info',
+        name: 'mail',
         columns: [
           {
             name: 'id',
@@ -21,41 +13,49 @@ export class createUserInfoTable1645096252579 implements MigrationInterface {
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment',
+            isNullable: false,
             unsigned: true,
           },
           {
-            name: 'user_id',
+            name: 'sender_id',
             type: 'int',
             unsigned: true,
             isNullable: false,
           },
           {
-            name: 'is_banned',
-            type: 'boolean',
-            default: false,
+            name: 'receiver_id',
+            type: 'int',
+            unsigned: true,
+            isNullable: false,
           },
           {
-            name: 'balance',
-            type: 'DECIMAL(10,0)',
+            name: 'meta',
+            type: 'json',
+            isNullable: false,
+          },
+          {
+            name: 'status',
+            type: 'varchar',
+            isNullable: false,
           },
           {
             name: 'created_at',
             type: 'datetime',
+            isNullable: false,
             default: 'CURRENT_TIMESTAMP',
           },
           {
             name: 'updated_at',
             type: 'datetime',
+            isNullable: false,
             default: 'CURRENT_TIMESTAMP',
           },
         ],
       }),
-      true,
     );
-    await queryRunner.createForeignKey('user_info', this.foreignKey);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DROP TABLE IF EXISTS user_info`);
+    await queryRunner.dropTable('cart');
   }
 }

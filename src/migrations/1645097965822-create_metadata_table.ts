@@ -6,7 +6,7 @@ export class createMetadataTable1645097965822 implements MigrationInterface {
     name: 'FK_metadata_user',
     columnNames: ['user_id'],
     referencedColumnNames: ['id'],
-    referencedTableName: 'users',
+    referencedTableName: 'user',
     onDelete: 'CASCADE',
   });
 

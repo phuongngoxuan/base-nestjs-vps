@@ -15,7 +15,6 @@ import { UsersModule } from 'src/modules/user/users.module';
 import { HttpClientModule } from 'src/shares/http-clients/http.module';
 import { KafkaModule } from 'src/shares/kafka-client/kafka-module';
 import { ReadScModule } from './modules/read-sc/read-sc.module';
-import { HistoryModule } from './modules/history/history.module';
 import { SeederModule } from './modules/seeder/seeder.module';
 
 const Modules = [
@@ -41,7 +40,6 @@ const Modules = [
   MailModule,
   HelloKafka,
   ReadScModule,
-  HistoryModule,
   SeederModule,
 ];
 export default Modules;

@@ -1,7 +1,8 @@
 import { Controller, Body, Get, Param, Post, Put, Query, HttpCode, UseGuards, Delete } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { PetsEntity } from 'src/models/entities/pets.entity';
+import { PetEntity } from 'src/models/entities/pet.entity';
 import { GetCurrentUser } from 'src/shares/decorators/get-current-user.decorators';
+import { UserID } from 'src/shares/decorators/get-user-id.decorator';
 import { CurrentUsersDto } from 'src/shares/dtos/current-user.dto';
 import { GetPetListRes } from 'src/shares/interface/paging-response.interface';
 import { AtGuards } from '../auth/guards';
@@ -27,8 +28,8 @@ export class PetController {
   @ApiOperation({ summary: 'get my pet.' })
   @UseGuards(AtGuards)
   @ApiOkResponse()
-  async findMyPet(@GetCurrentUser() user: CurrentUsersDto, @Query() getPetsDto: GetPetsDto): Promise<GetPetListRes> {
-    return this.petService.findAll(getPetsDto, user.userId);
+  async findMyPet(@UserID() userId:number, @Query() getPetsDto: GetPetsDto): Promise<GetPetListRes> {
+    return this.petService.findAll(getPetsDto, userId);
   }
 
   @Post()
@@ -36,8 +37,8 @@ export class PetController {
   @ApiOperation({ summary: 'Create new pet.' })
   @UseGuards(AtGuards)
   @ApiCreatedResponse()
-  async create(@GetCurrentUser() user: CurrentUsersDto, @Body() createPetDto: CreatePetDto): Promise<PetsEntity> {
-    return this.petService.create(user.userId, createPetDto);
+  async create(@UserID() userId: number, @Body() createPetDto: CreatePetDto): Promise<PetEntity> {
+    return this.petService.create(userId, createPetDto);
   }
 
   @Put(':id')
@@ -46,17 +47,17 @@ export class PetController {
   @UseGuards(AtGuards)
   @HttpCode(204)
   async update(
-    @GetCurrentUser() user: CurrentUsersDto,
+    @UserID() userId: number,
     @Param('id') id: number,
     @Body() updatePetDto: UpdatePetDto,
-  ): Promise<PetsEntity> {
-    return this.petService.update(id, updatePetDto, user.userId);
+  ): Promise<PetEntity> {
+    return this.petService.update(id, updatePetDto,userId);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get pet by id.' })
   @ApiOkResponse()
-  async findOne(@Param('id') id: number): Promise<PetsEntity> {
+  async findOne(@Param('id') id: number): Promise<PetEntity> {
     return this.petService.findById(id);
   }
 

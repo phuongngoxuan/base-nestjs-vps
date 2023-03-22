@@ -9,11 +9,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PetVendorsEntity } from './pet-vendors.entity';
-import { UsersEntity } from './users.entity';
+import { PetEntity } from './pet.entity';
+import { UserEntity } from './users.entity';
 
 @Entity({
-  name: 'reviews',
+  name: 'review',
 })
 export class ReviewEntity {
   @PrimaryGeneratedColumn()
@@ -22,8 +22,11 @@ export class ReviewEntity {
   @Column({name:'user_id'})
   userId: number;
 
-  @Column({name:'pet_vendor_id'})
-  vendorId: number;
+  @Column({name:'pet_id'})
+  petId: number;
+
+  @Column({name:'shop_id'})
+  shopId: number;
 
   @Column()
   rating: number;
@@ -31,8 +34,8 @@ export class ReviewEntity {
   @Column()
   comments: string;
 
-  @Column({name:'image_url'})
-  imageUrl: string;
+  @Column({name:'list_image'})
+  listImage: string;
 
   @CreateDateColumn({ name: 'created_at' })
   @Transform(dateTransformer)
@@ -42,16 +45,21 @@ export class ReviewEntity {
   @Transform(dateTransformer)
   updatedAt: Date;
 
-  @ManyToOne(() => UsersEntity, (user) => user.reviews, {
+  @ManyToOne(() => UserEntity, (user) => user.userReviews, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ referencedColumnName: 'id', name: 'user_id' })
-  user: UsersEntity;
+  user: UserEntity;
 
-  @ManyToOne(() => PetVendorsEntity, (petVendor) => petVendor.reviews, {
+  @ManyToOne(() => UserEntity, (user) => user.shopReviews, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ referencedColumnName: 'id', name: 'pet_vendor_id' })
-  petVendor: PetVendorsEntity;
+  @JoinColumn({ referencedColumnName: 'id', name: 'shop_id' })
+  shop: UserEntity;
 
+  @ManyToOne(() => PetEntity, (pet) => pet.reviews, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ referencedColumnName: 'id', name: 'pet_id' })
+  pet: UserEntity;
 }
