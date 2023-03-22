@@ -1,11 +1,11 @@
-import { UsersEntity } from 'src/models/entities/users.entity';
+import { UserEntity } from 'src/models/entities/users.entity';
 import { GetUsersDto } from 'src/modules/user/dto/get-users.dto';
 import { GetUserListRes } from 'src/shares/interface/paging-response.interface';
 import { EntityRepository, Repository } from 'typeorm';
 
-@EntityRepository(UsersEntity)
-export class UserRepository extends Repository<UsersEntity> {
-  async findUserByAccountId(accountId: number): Promise<UsersEntity> {
+@EntityRepository(UserEntity)
+export class UserRepository extends Repository<UserEntity> {
+  async findUserByAccountId(accountId: number): Promise<UserEntity> {
     const user = await this.createQueryBuilder('users')
       .select('*')
       .innerJoin('accounts', 'accounts', 'accounts.ownerId = users.id')

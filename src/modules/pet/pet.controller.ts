@@ -1,6 +1,6 @@
 import { Controller, Body, Get, Param, Post, Put, Query, HttpCode, UseGuards, Delete } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { PetsEntity } from 'src/models/entities/pets.entity';
+import { PetEntity } from 'src/models/entities/pet.entity';
 import { GetCurrentUser } from 'src/shares/decorators/get-current-user.decorators';
 import { CurrentUsersDto } from 'src/shares/dtos/current-user.dto';
 import { GetPetListRes } from 'src/shares/interface/paging-response.interface';
@@ -36,7 +36,7 @@ export class PetController {
   @ApiOperation({ summary: 'Create new pet.' })
   @UseGuards(AtGuards)
   @ApiCreatedResponse()
-  async create(@GetCurrentUser() user: CurrentUsersDto, @Body() createPetDto: CreatePetDto): Promise<PetsEntity> {
+  async create(@GetCurrentUser() user: CurrentUsersDto, @Body() createPetDto: CreatePetDto): Promise<PetEntity> {
     return this.petService.create(user.userId, createPetDto);
   }
 
@@ -49,14 +49,14 @@ export class PetController {
     @GetCurrentUser() user: CurrentUsersDto,
     @Param('id') id: number,
     @Body() updatePetDto: UpdatePetDto,
-  ): Promise<PetsEntity> {
+  ): Promise<PetEntity> {
     return this.petService.update(id, updatePetDto, user.userId);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get pet by id.' })
   @ApiOkResponse()
-  async findOne(@Param('id') id: number): Promise<PetsEntity> {
+  async findOne(@Param('id') id: number): Promise<PetEntity> {
     return this.petService.findById(id);
   }
 

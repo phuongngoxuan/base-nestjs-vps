@@ -1,29 +1,31 @@
-import { Expose, Transform } from 'class-transformer';
+import { Transform } from 'class-transformer';
 import { dateTransformer } from 'src/shares/helpers/transformer';
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity({
-  name: 'user_info',
+  name: 'cart',
 })
-export class UserInfoEntity {
+export class CartEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    name: 'user_id',
-  })
-  @Expose()
+  @Column({ name: 'user_id' })
   userId: number;
 
-  @Column({
-    name: 'is_banned',
-  })
-  @Expose()
-  isBanned: boolean;
+  @Column({ name: 'pet_id' })
+  petId: number;
+
+  @Column({ name: 'shop_id' })
+  shopId: number;
 
   @Column()
-  @Expose()
-  balance: number;
+  rating: number;
+
+  @Column()
+  comments: string;
+
+  @Column({ name: 'list_image' })
+  listImage: string;
 
   @CreateDateColumn({ name: 'created_at' })
   @Transform(dateTransformer)

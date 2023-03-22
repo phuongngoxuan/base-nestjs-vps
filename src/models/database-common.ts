@@ -1,23 +1,27 @@
 import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserRepository } from 'src/models/repositories/users.repository';
-import { CrawlStatusRepository } from './repositories/crawler.repository';
-import { HistoriesRepository } from './repositories/histories.repository';
-import { MessageChatRepository } from './repositories/message-chats.repositoty';
-import { PetVendorsRepository } from './repositories/pet-vendors.repository';
-import { PetsRepository } from './repositories/pets.repository';
-import { ProceedPetExchangesRepository } from './repositories/proceed-pet-exchanges.repository';
-import { ReviewRepository } from './repositories/reviews.repository';
+import { UserRepository } from 'src/models/repositories/user.repository';
+import { CartRepository } from './repositories/cart.repository';
+import { CommentRepository } from './repositories/comment.repository';
+import { MailRepository } from './repositories/mail.repository';
+import { PetsRepository } from './repositories/pet.repository';
+import { PostRepository } from './repositories/post.repository';
+import { ReactionRepository } from './repositories/reaction.repository';
+import { RequestRepository } from './repositories/request.repository';
+import { ReviewRepository } from './repositories/review.repository';
+import { TransactionRepository } from './repositories/transaction.entity';
 
 const commonRepositories = [
-  UserRepository,
-  CrawlStatusRepository,
-  HistoriesRepository,
-  MessageChatRepository,
+  CartRepository,
+  CommentRepository,
+  MailRepository,
   PetsRepository,
-  ProceedPetExchangesRepository,
-  PetVendorsRepository,
-  ReviewRepository
+  PostRepository,
+  ReactionRepository,
+  RequestRepository,
+  ReviewRepository,
+  TransactionRepository,
+  UserRepository,
 ];
 
 @Global()

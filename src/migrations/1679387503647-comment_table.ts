@@ -39,18 +39,6 @@ export class commentTable1679387503647 implements MigrationInterface {
             type: 'json',
           },
           {
-            name: 'is_deleted',
-            type: 'boolean',
-            isNullable: false,
-            default: false,
-          },
-          {
-            name: 'deleted_by',
-            type: 'int',
-            isNullable: false,
-            default: false,
-          },
-          {
             name: 'created_at',
             type: 'datetime',
             isNullable: false,

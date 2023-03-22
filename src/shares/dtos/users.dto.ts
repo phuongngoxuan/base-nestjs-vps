@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { HistoriesEntity } from '../../models/entities/histories.entity';
 
 export class UsersDto {
   @ApiProperty()
@@ -16,9 +15,6 @@ export class UsersDto {
 
   @ApiProperty()
   status: string;
-
-  @ApiProperty()
-  history: HistoriesEntity[];
 
   @ApiProperty()
   createdAt: Date;

@@ -1,9 +1,9 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { httpErrors } from 'src/shares/const/http-errors.const';
-import { UsersEntity } from 'src/models/entities/users.entity';
+import { UserEntity } from 'src/models/entities/users.entity';
 import { CreateUserDto } from 'src/modules/user/dto/create-user.dto';
 import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
-import { UserRepository } from 'src/models/repositories/users.repository';
+import { UserRepository } from 'src/models/repositories/user.repository';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { GetUsersDto } from './dto/get-users.dto';
 import { GetUserListRes } from 'src/shares/interface/paging-response.interface';
@@ -34,7 +34,7 @@ export class UserService {
     return !!user;
   }
 
-  async findUserById(id: number): Promise<UsersEntity> {
+  async findUserById(id: number): Promise<UserEntity> {
     const user = await this.usersRepositoryReport.findOne({
       where: {
         id: id,
@@ -46,7 +46,7 @@ export class UserService {
     return user;
   }
 
-  async findUserByAddress(address: string): Promise<UsersEntity> {
+  async findUserByAddress(address: string): Promise<UserEntity> {
     const user = await this.usersRepositoryReport.findOne({
       where: {
         address: address,
@@ -62,7 +62,7 @@ export class UserService {
     return this.usersRepositoryReport.getUsers(getUser);
   }
 
-  async findOne(id: number): Promise<UsersEntity> {
+  async findOne(id: number): Promise<UserEntity> {
     const user = await this.usersRepositoryReport.findOne({ id });
 
     if (!user) {
@@ -72,7 +72,7 @@ export class UserService {
     return user;
   }
 
-  async create(createUserDto: CreateUserDto): Promise<UsersEntity> {
+  async create(createUserDto: CreateUserDto): Promise<UserEntity> {
     const userData = await this.usersRepositoryReport.findOne({ email: createUserDto.email });
     if (userData) {
       throw new BadRequestException(httpErrors.ACCOUNT_EXISTED);

@@ -143,25 +143,25 @@ export class petsTable1679039563590 implements MigrationInterface {
       }),
     );
 
-    await queryRunner.createForeignKey(
-      'pet',
-      new TableForeignKey({
-        columnNames: ['dad_pet_id'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'pet',
-        onDelete: 'CASCADE',
-      }),
-    );
+    // await queryRunner.createForeignKey(
+    //   'pet',
+    //   new TableForeignKey({
+    //     columnNames: ['dad_pet_id'],
+    //     referencedColumnNames: ['id'],
+    //     referencedTableName: 'pet',
+    //     onDelete: 'CASCADE',
+    //   }),
+    // );
 
-    await queryRunner.createForeignKey(
-      'pet',
-      new TableForeignKey({
-        columnNames: ['mother_pet_id'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'pet',
-        onDelete: 'CASCADE',
-      }),
-    );
+    // await queryRunner.createForeignKey(
+    //   'pet',
+    //   new TableForeignKey({
+    //     columnNames: ['mother_pet_id'],
+    //     referencedColumnNames: ['id'],
+    //     referencedTableName: 'pet',
+    //     onDelete: 'CASCADE',
+    //   }),
+    // );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
@@ -177,15 +177,15 @@ export class petsTable1679039563590 implements MigrationInterface {
     await queryRunner.dropForeignKey('shop_id', foreignKeyShop);
     await queryRunner.dropColumn('pet', 'shop_id');
 
-    // Drop FK Dad Pet
-    const foreignKeyDadPet = table.foreignKeys.find((fk) => fk.columnNames.indexOf('dad_pet_id') !== -1);
-    await queryRunner.dropForeignKey('dad_pet_id', foreignKeyDadPet);
-    await queryRunner.dropColumn('pet', 'dad_pet_id');
+    // // Drop FK Dad Pet
+    // const foreignKeyDadPet = table.foreignKeys.find((fk) => fk.columnNames.indexOf('dad_pet_id') !== -1);
+    // await queryRunner.dropForeignKey('dad_pet_id', foreignKeyDadPet);
+    // await queryRunner.dropColumn('pet', 'dad_pet_id');
 
-    // Drop FK Mother Pet
-    const foreignKeyMotherPet = table.foreignKeys.find((fk) => fk.columnNames.indexOf('mother_pet_id') !== -1);
-    await queryRunner.dropForeignKey('mother_pet_id', foreignKeyMotherPet);
-    await queryRunner.dropColumn('pet', 'mother_pet_id');
+    // // Drop FK Mother Pet
+    // const foreignKeyMotherPet = table.foreignKeys.find((fk) => fk.columnNames.indexOf('mother_pet_id') !== -1);
+    // await queryRunner.dropForeignKey('mother_pet_id', foreignKeyMotherPet);
+    // await queryRunner.dropColumn('pet', 'mother_pet_id');
 
     await queryRunner.dropTable('pet');
   }

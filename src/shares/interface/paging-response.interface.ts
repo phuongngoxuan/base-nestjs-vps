@@ -1,5 +1,5 @@
-import { PetsEntity } from 'src/models/entities/pets.entity';
-import { UsersEntity } from 'src/models/entities/users.entity';
+import { PetEntity } from 'src/models/entities/pet.entity';
+import { UserEntity } from 'src/models/entities/users.entity';
 
 
 interface meta {
@@ -12,10 +12,10 @@ interface meta {
   };
 }
 export interface GetUserListRes extends meta {
-  items: UsersEntity[];
+  items: UserEntity[];
 }
 
 
 export interface GetPetListRes extends meta {
-  items: PetsEntity[];
+  items: PetEntity[];
 }

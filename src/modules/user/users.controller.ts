@@ -13,7 +13,7 @@ import {
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import { MailService } from 'src/modules/mail/mail.service';
 import { UserService } from 'src/modules/user/users.service';
-import { UsersEntity } from 'src/models/entities/users.entity';
+import { UserEntity } from 'src/models/entities/users.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { GetUserDto } from './dto/get-user.dto';
@@ -36,7 +36,7 @@ export class UserController {
   @Post()
   @ApiOperation({ summary: 'Create new user.' })
   @ApiCreatedResponse()
-  async create(@Body() createUserDto: CreateUserDto): Promise<UsersEntity> {
+  async create(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
     return this.userService.create(createUserDto);
   }
 
@@ -50,7 +50,7 @@ export class UserController {
   @Get(':id')
   @ApiOperation({ summary: 'Get user by id.' })
   @ApiOkResponse()
-  async findOne(@Param() getUserDto: GetUserDto): Promise<UsersEntity> {
+  async findOne(@Param() getUserDto: GetUserDto): Promise<UserEntity> {
     return this.userService.findOne(getUserDto.id);
   }
 

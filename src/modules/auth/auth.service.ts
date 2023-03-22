@@ -16,7 +16,7 @@ import { UserService } from 'src/modules/user/users.service';
 import { httpErrors } from 'src/shares/const/http-errors.const';
 import * as bcrypt from 'bcryptjs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserRepository } from '../../models/repositories/users.repository';
+import { UserRepository } from '../../models/repositories/user.repository';
 import { ResponseRefreshTokenDto } from './dto/response-refresh-token.dto';
 import { UserRefreshTokenDto } from './dto/user-refresh-token.dto';
 
