@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { sleep } from 'src/shares/helpers/utils';
-import { LogEventDto } from './dto/log-event-crawler.dto';
-import { FactoryHandler } from './crawler-factory.handler';
+import { HandlerEvent } from './crawler-base.handler';
 import { ContractDto, GetBlockDto } from './dto/contract.dto';
 import { UsersEntity } from '../../models/entities/users.entity';
 import { TransactionCrawlDto } from './dto/transaction-crawl.dto';
@@ -9,13 +8,20 @@ import { UserInfoEntity } from 'src/models/entities/user-info.entity';
 import { HistoriesEntity } from '../../models/entities/histories.entity';
 import { Repository, Transaction, TransactionRepository } from 'typeorm';
 import { CrawlEntity } from '../../models/entities/crawler-status.entity';
-import { bscPoolFactoryContractInfo } from './config/crawler.config';
+import { baseContractInfo } from './config/crawler.config';
+import { EthersService } from '../etherjs/ethers.service';
+import { Web3jsService } from '../web3js/web3js.service';
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Web3 = require('web3');
 
 @Injectable()
 export class CrawlerService {
-  constructor(private factoryHandler: FactoryHandler) {}
+  constructor(
+    private factoryHandler: HandlerEvent,
+    private ethersService: EthersService,
+    private web3jsService: Web3jsService,
+  ) {}
   // function crawler can be reused many times with parameter contractInfo
   async start(contractInfo: ContractDto): Promise<void> {
     let passed = true;
@@ -77,11 +83,8 @@ export class CrawlerService {
     transaction: TransactionCrawlDto,
   ): Promise<void> {
     const fromBlock: number = blockInDB;
-    console.log('__________controller get block__________');
     const toBlock: number = this.getToBlock(latestBlockInSC, blockInDB, contractInfo.maxRange);
-    console.log('__________controller start handler contract__________');
     await this.handlerContract(contractInfo, transaction, fromBlock, toBlock);
-    console.log('__________controller end handler contract__________');
   }
 
   async handlerContract(
@@ -93,10 +96,10 @@ export class CrawlerService {
     // filter smart contract
     switch (contractInfo.contractName) {
       // Handler factory pool
-      case bscPoolFactoryContractInfo.contractName:
-        const eventPoolFactories = await this.crawlEvent(fromBlock, toBlock, contractInfo);
-        if (eventPoolFactories.length > 0) {
-          await this.factoryHandler.handlerEvents(eventPoolFactories, contractInfo, transaction);
+      case baseContractInfo.contractName:
+        const log = await this.ethersService.getLogs(fromBlock, toBlock, contractInfo);
+        if (log.length > 0) {
+          await this.factoryHandler.handlerEvents(log, contractInfo, transaction);
         }
         await this.updateBlockCrawlSuccess(toBlock, contractInfo, transaction);
         break;
@@ -142,27 +145,6 @@ export class CrawlerService {
     } else {
       return Number(log.blockNumber);
     }
-  }
-
-  // get logs fromBlock toBlock input
-  async crawlEvent(fromBlockNumber: number, toBlockNumber: number, contract: ContractDto): Promise<LogEventDto[]> {
-    const web3Provider = new Web3.providers.HttpProvider(contract.rpc);
-    const web3 = new Web3(web3Provider);
-    const contractWeb3 = new web3.eth.Contract(contract.abi, contract.contractAddress);
-    const eventLogs: LogEventDto[] = await contractWeb3.getPastEvents(
-      'allEvents',
-      {
-        fromBlock: fromBlockNumber,
-        toBlock: toBlockNumber,
-      },
-      (err) => {
-        if (err) {
-          console.error(err);
-        }
-      },
-    );
-
-    return eventLogs;
   }
 
   // get late block - 1

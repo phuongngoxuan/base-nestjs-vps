@@ -1,4 +1,4 @@
-import { EventInfo } from './event-info.dto';
+import { EventWeb3Dto } from './event-web3js.dto';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export class ReturnValues {
   '0': string;
@@ -9,6 +9,6 @@ export class ReturnValues {
   reward?: string[];
 }
 
-export class LogEventDto extends EventInfo {
+export class LogEventDto extends EventWeb3Dto {
   returnValues: ReturnValues;
 }

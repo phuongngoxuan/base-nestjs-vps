@@ -9,17 +9,14 @@ import {
   Post,
   Delete,
   Param,
-  UseInterceptors,
   Query,
 } from '@nestjs/common';
 import { ApiResponse, ApiBearerAuth, ApiTags, ApiOperation, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
-import { MailService } from 'src/modules/mail/mail.service';
 import { UserService } from 'src/modules/user/users.service';
 import { UsersEntity } from 'src/models/entities/users.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { GetUserDto } from './dto/get-user.dto';
-import { TransformInterceptor } from '../../shares/interceptors/transform.interceptor ';
 import { GetUsersDto } from './dto/get-users.dto';
 import { UserList } from 'src/shares/interface/paging-response.interface';
 
@@ -27,7 +24,7 @@ import { UserList } from 'src/shares/interface/paging-response.interface';
 @ApiBearerAuth()
 @ApiTags('User')
 export class UserController {
-  constructor(private userService: UserService, private readonly mailService: MailService) {}
+  constructor(private userService: UserService) {}
 
   @Get()
   async findAll(@Query() getUser: GetUsersDto): Promise<UserList> {

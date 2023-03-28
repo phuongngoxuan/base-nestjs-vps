@@ -10,14 +10,13 @@ import { DatabaseCommonModule } from 'src/models/database-common';
 import { AuthModule } from 'src/modules/auth/auth.module';
 import { EventModule } from 'src/modules/events/event.module';
 import { HelloKafka } from 'src/modules/hello-kafka/hello-kafka.module';
-import { MailModule } from 'src/modules/mail/mail.module';
 import { UsersModule } from 'src/modules/user/users.module';
 import { HttpClientModule } from 'src/shares/http-clients/http.module';
 import { KafkaModule } from 'src/shares/kafka-client/kafka-module';
 import { CrawlerModule } from './modules/crawler/crawler.module';
-import { ReadScModule } from './modules/read-sc/read-sc.module';
 import { HistoryModule } from './modules/history/history.module';
-import { SeederModule } from './modules/seeder/seeder.module';
+import { Web3jsModule } from './modules/web3js/web3js.module';
+import { EthersModule } from './modules/etherjs/ethers.module';
 
 const Modules = [
   Logger,
@@ -39,11 +38,10 @@ const Modules = [
   EventModule,
   AuthModule,
   UsersModule,
-  MailModule,
   HelloKafka,
   CrawlerModule,
-  ReadScModule,
+  Web3jsModule,
+  EthersModule,
   HistoryModule,
-  SeederModule,
 ];
 export default Modules;

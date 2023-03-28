@@ -6,7 +6,6 @@ import { LoginDto } from 'src/modules/auth/dto/login.dto';
 import { RefreshAccessTokenDto } from 'src/modules/auth/dto/refresh-access-token.dto';
 import { ResponseLogin } from 'src/modules/auth/dto/response-login.dto';
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
-import { MailService } from 'src/modules/mail/mail.service';
 import { UserService } from 'src/modules/user/users.service';
 import { UserID } from 'src/shares/decorators/get-user-id.decorator';
 import { ResponseDto } from 'src/shares/dtos/response.dto';
@@ -18,7 +17,6 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
-    private readonly mailService: MailService,
   ) {}
 
   @Get('/current')

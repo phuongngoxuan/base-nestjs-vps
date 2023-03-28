@@ -1,4 +1,4 @@
-export class EventInfo {
+export class EventWeb3Dto {
   address: string;
   blockHash: string;
   blockNumber: number;

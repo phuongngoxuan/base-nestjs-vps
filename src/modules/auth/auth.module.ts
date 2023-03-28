@@ -8,7 +8,6 @@ import { JwtStrategy } from 'src/modules/auth/strategies/jwt.strategy';
 import { AuthController } from 'src/modules/auth/auth.controller';
 import * as redisStore from 'cache-manager-redis-store';
 import { redisConfig } from 'src/configs/redis.config';
-import { MailModule } from 'src/modules/mail/mail.module';
 
 @Module({
   imports: [
@@ -23,7 +22,6 @@ import { MailModule } from 'src/modules/mail/mail.module';
       ...redisConfig,
       isGlobal: true,
     }),
-    MailModule,
   ],
   providers: [AuthService, JwtStrategy],
   exports: [AuthService],
