@@ -8,7 +8,7 @@ import { baseContractInfo } from './config/crawler.config';
 export class CrawlerEventNetworkConsole {
   constructor(private crawlerService: CrawlerService) {}
   @Command({
-    command: 'crawl-event-network',
+    command: 'crawl-event',
     description: 'crawl event network',
   })
   async startCrawler(): Promise<void> {

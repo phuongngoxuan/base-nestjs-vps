@@ -98,6 +98,7 @@ export class CrawlerService {
       // Handler factory pool
       case baseContractInfo.contractName:
         const log = await this.ethersService.getLogs(fromBlock, toBlock, contractInfo);
+        console.log(log);
         if (log.length > 0) {
           await this.factoryHandler.handlerEvents(log, contractInfo, transaction);
         }
