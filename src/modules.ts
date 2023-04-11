@@ -17,6 +17,8 @@ import { CrawlerModule } from './modules/crawler/crawler.module';
 import { HistoryModule } from './modules/history/history.module';
 import { Web3jsModule } from './modules/web3js/web3js.module';
 import { EthersModule } from './modules/etherjs/ethers.module';
+import { UploadModule } from './modules/upload/upload.module';
+import { AwsModule } from './modules/aws/aws.module';
 
 const Modules = [
   Logger,
@@ -43,5 +45,7 @@ const Modules = [
   Web3jsModule,
   EthersModule,
   HistoryModule,
+  AwsModule,
+  UploadModule,
 ];
 export default Modules;

@@ -125,57 +125,9 @@ export const httpErrors = {
     code: 'ORDER_00015',
   },
 
-  // instrument
-  INSTRUMENT_DOES_NOT_EXIST: {
-    message: 'Instrument does not exist.',
-    code: 'INSTRUMENT_00001',
-  },
-
-  // setting
-  SETTING_NOT_FOUND: {
-    message: 'This setting does not exist.',
-    code: 'SETTING_00001',
-  },
-  SETTING_NOT_VALID: {
-    message: 'This setting does not valid.',
-    code: 'SETTING_00002',
-  },
-
-  // withdraw
-  AMOUNT_LT_MINIMUM_WITHDRAWAL: {
-    message: 'Amount withdraw must be greater than or equal minumum amount.',
-    code: 'WITHDRAWL_00001',
-  },
-  WITHDRAW_FEE_CHANGED: {
-    message: 'Withdrawal fee has been just changed.',
-    code: 'WITHDRAWL_00002',
-  },
-
-  // api key
-  APIKEY_TIMESTAMP_TOO_OLD: {
-    message: 'Timestamp is too old.',
-    code: 'APIKEY_00001',
-  },
-
-  POOL_NOT_FOUND: {
-    message: 'Pool not found.',
-    code: 'POOL_00000',
-  },
-
-  POOL_RATE_MOT_MATCH: {
-    message: 'Rate not match.',
-    code: 'POOL_00001',
-  },
-
-  // rpc
-  RPC_LIMIT: {
-    message: 'RPC LIMIT ================================================================================ .',
-    code: 'RPC_00001',
-  },
-
-  // sign deposit withdraw
-  SIGN_BAD_REQUEST: {
-    message: 'Bad request sign',
-    code: 'SIGN_00001',
+  // file error
+  FILE_NOT_FOUND: {
+    message: 'file not found.',
+    code: 'FILE_00001',
   },
 };

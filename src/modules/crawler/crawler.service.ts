@@ -93,20 +93,22 @@ export class CrawlerService {
     fromBlock: number,
     toBlock: number,
   ): Promise<void> {
-    // filter smart contract
-    switch (contractInfo.contractName) {
-      // Handler factory pool
-      case baseContractInfo.contractName:
-        const log = await this.ethersService.getLogs(fromBlock, toBlock, contractInfo);
-        console.log(log);
-        if (log.length > 0) {
-          await this.factoryHandler.handlerEvents(log, contractInfo, transaction);
-        }
-        await this.updateBlockCrawlSuccess(toBlock, contractInfo, transaction);
-        break;
-      default:
-        break;
-    }
+    const log = await this.ethersService.getLogs(fromBlock, toBlock, contractInfo);
+    console.log('total log:', log.length);
+    await this.updateBlockCrawlSuccess(toBlock, contractInfo, transaction);
+    // // filter smart contract
+    // switch (contractInfo.contractName) {
+    //   // Handler factory pool
+    //   case baseContractInfo.contractName:
+    //     console.log(log);
+    //     if (log.length > 0) {
+    //       await this.factoryHandler.handlerEvents(log, contractInfo, transaction);
+    //     }
+
+    //     break;
+    //   default:
+    //     break;
+    // }
   }
 
   async updateBlockCrawlSuccess(

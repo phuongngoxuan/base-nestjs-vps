@@ -56,3 +56,12 @@ mail:
 chain_id:
   kcc: CHAIN_ID_KCC
   bnb: CHAIN_ID_BNB
+
+aws_config:
+  upload_path: UPLOAD_PATH
+  aws_access_key_id: AWS_ACCESS_KEY_ID
+  aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+  aws_bucket_name: AWS_BUCKET_NAME
+  aws_region: AWS_REGION
+  domain: DOMAIN
+  upload_limit: UPLOAD_LIMIT
