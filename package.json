@@ -35,6 +35,7 @@
     "@nestjs/common": "7.6.15",
     "@nestjs/core": "7.6.15",
     "@nestjs/jwt": "7.2.0",
+    "@nestjs/mongoose": "^9.2.2",
     "@nestjs/passport": "7.1.5",
     "@nestjs/platform-express": "7.6.15",
     "@nestjs/platform-socket.io": "7.6.17",
@@ -49,7 +50,8 @@
     "@types/multer": "^1.4.7",
     "aws-client-s3": "^1.4.5",
     "aws-sdk": "^2.1353.0",
-    "bcrypt": "5.0.1",
+    "bcrypt": "^5.1.0",
+    "bcryptjs": "^2.4.3",
     "bignumber.js": "9.1.0",
     "bull": "3.22.7",
     "cache-manager": "3.4.3",
@@ -69,6 +71,9 @@
     "kafkajs": "1.15.0",
     "lodash": "4.17.21",
     "mime-types": "^2.1.35",
+    "mongoose": "^6.7.0",
+    "mongoose-aggregate-paginate-v2": "^1.0.6",
+    "mongoose-paginate-v2": "^1.7.1",
     "morgan": "1.10.0",
     "mysql": "2.18.1",
     "nest-queue": "1.0.3",
@@ -92,8 +97,7 @@
     "typeorm": "0.2.41",
     "typeorm-transactional-cls-hooked": "0.1.21",
     "typescript": "4.2.3",
-    "uuid": "8.3.2",
-    "web3": "^1.8.0"
+    "uuid": "8.3.2"
   },
   "devDependencies": {
     "@commitlint/cli": "12.1.4",

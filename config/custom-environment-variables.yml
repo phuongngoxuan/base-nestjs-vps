@@ -8,34 +8,6 @@ app:
   jwt_refresh_token_secret: JWT_REFRESH_TOKEN_SECRET
   jwt_refresh_token_expiration_time: JWT_REFRESH_TOKEN_EXPIRATION_TIME
 
-master:
-  type: mysql
-  host: MYSQL_HOST
-  port: MYSQL_PORT
-  username: MYSQL_USERNAME
-  password: MYSQL_PASSWORD
-  database: MYSQL_DATABASE
-  logging:
-    __name: MYSQL_LOG
-    __format: json
-  extra:
-    __name: MYSQL_EXTRA
-    __format: json
-
-report:
-  type: mysql
-  host: REPORT_MYSQL_HOST
-  port: REPORT_MYSQL_PORT
-  username: REPORT_MYSQL_USERNAME
-  password: REPORT_MYSQL_PASSWORD
-  database: REPORT_MYSQL_DATABASE
-  logging:
-    __name: REPORT_MYSQL_LOG
-    __format: json
-  extra:
-    __name: REPORT_MYSQL_EXTRA
-    __format: json
-
 redis:
   host: REDIS_HOST
   port: REDIS_PORT
@@ -53,10 +25,6 @@ mail:
   domain: MAIL_DOMAIN
   enable: MAIL_ENABLE
 
-chain_id:
-  kcc: CHAIN_ID_KCC
-  bnb: CHAIN_ID_BNB
-
 aws_config:
   upload_path: UPLOAD_PATH
   aws_access_key_id: AWS_ACCESS_KEY_ID
@@ -65,3 +33,6 @@ aws_config:
   aws_region: AWS_REGION
   domain: DOMAIN
   upload_limit: UPLOAD_LIMIT
+
+mongodb:
+  uri: MONGO_URI

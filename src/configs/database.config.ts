@@ -1,28 +1,46 @@
 import { getConfig } from 'src/configs/index';
+import { MongooseModuleOptions } from '@nestjs/mongoose';
+import mongooseAggregatePaginateV2 from 'src/shares/libs/mongoose-aggregate-paginate-v2';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const addedPaginate = require('mongoose-aggregate-paginate-v2');
 
 export interface DatabaseConfig {
-  type: 'mysql';
-  host: string;
-  port: number;
-  username: string;
-  password: string;
-  database: string;
-  entities: string[];
-  logging: boolean;
+  uri: string;
+  options: MongooseModuleOptions;
 }
 
 export const masterConfig = {
-  ...getConfig().get<DatabaseConfig>('master'),
-  name: 'master',
-  entities: [__dirname + '/../models/entities/**/*{.ts,.js}'],
-  autoLoadEntities: true,
-  loading: true,
+  uri: getConfig().get<string>('mongodb.uri'),
+  options: {
+    directConnection: true,
+    connectionFactory: (connection) => {
+      connection.plugin(addedPaginate);
+      connection.plugin(mongooseAggregatePaginateV2);
+      return connection;
+    },
+  },
 };
 
 export const reportConfig = {
-  ...getConfig().get<DatabaseConfig>('report'),
-  name: 'report',
-  entities: [__dirname + '/../models/entities/**/*{.ts,.js}'],
-  autoLoadEntities: true,
-  loading: true,
+  uri: getConfig().get<string>('mongodb.uri'),
+  options: {
+    directConnection: true,
+    connectionFactory: (connection) => {
+      connection.plugin(addedPaginate);
+      connection.plugin(mongooseAggregatePaginateV2);
+      return connection;
+    },
+  },
+};
+
+export const mongodb = {
+  uri: getConfig().get<string>('mongodb.uri'),
+  options: {
+    directConnection: true,
+    connectionFactory: (connection) => {
+      connection.plugin(addedPaginate);
+      connection.plugin(mongooseAggregatePaginateV2);
+      return connection;
+    },
+  },
 };

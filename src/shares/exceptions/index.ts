@@ -53,16 +53,6 @@ export const httpErrors = {
     code: 'USER_00028',
   },
 
-  // latest block
-  LATEST_BLOCK_EXISTED: {
-    message: 'Latest block exist.',
-    code: 'LATEST_BLOCK_00001',
-  },
-  POSITION_NOT_FOUND: {
-    message: 'Position not found.',
-    code: 'POSITION_00002',
-  },
-
   // order error
   ORDER_NOT_FOUND: {
     message: 'Order not found.',
@@ -75,54 +65,6 @@ export const httpErrors = {
   ORDER_ALREADY_CANCELED: {
     message: 'This order have been already canceled and waiting to confirm.',
     code: 'ORDER_00003',
-  },
-  ORDER_UNKNOWN_VALIDATION_FAIL: {
-    message: 'Order validation failed.',
-    code: 'ORDER_00004',
-  },
-  ORDER_PRICE_VALIDATION_FAIL: {
-    message: 'Order price validation failed.',
-    code: 'ORDER_00005',
-  },
-  ORDER_TRIGGER_VALIDATION_FAIL: {
-    message: 'Order trigger validation failed.',
-    code: 'ORDER_00006',
-  },
-  ORDER_STOP_PRICE_VALIDATION_FAIL: {
-    message: 'Order stop price validation failed.',
-    code: 'ORDER_00007',
-  },
-  ORDER_TRAIL_VALUE_VALIDATION_FAIL: {
-    message: 'Order trail value validation failed.',
-    code: 'ORDER_00008',
-  },
-  ORDER_MINIMUM_QUANTITY_VALIDATION_FAIL: {
-    message: 'Your order size is smaller than the minimum size.',
-    code: 'ORDER_00009',
-  },
-  ORDER_MAXIMUM_QUANTITY_VALIDATION_FAIL: {
-    message: 'Your order size is greater than the maximum size.',
-    code: 'ORDER_00010',
-  },
-  ORDER_AVAILABLE_BALANCE_VALIDATION_FAIL: {
-    message: 'You have insufficient margin to place this order.',
-    code: 'ORDER_00011',
-  },
-  ORDER_QUANTITY_PRECISION_VALIDATION_FAIL: {
-    message: 'Your order quantity precision is not match.',
-    code: 'ORDER_00012',
-  },
-  ORDER_PRICE_PRECISION_VALIDATION_FAIL: {
-    message: 'Your order price precision is not match.',
-    code: 'ORDER_00013',
-  },
-  ORDER_STOP_PRICE_PRECISION_VALIDATION_FAIL: {
-    message: 'Your order stop price precision is not match.',
-    code: 'ORDER_00014',
-  },
-  ORDER_TRAIL_VALUE_PRECISION_VALIDATION_FAIL: {
-    message: 'Your order stop price precision is not match.',
-    code: 'ORDER_00015',
   },
 
   // file error

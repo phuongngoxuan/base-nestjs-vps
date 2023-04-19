@@ -1,57 +1,96 @@
-version: '3'
+# Use root/example as user/password credentials
+version: "3.1"
+
 services:
-  mysql:
-    image: mysql:8.0.25
-    container_name: base-mysql
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --sql_mode="" --default-authentication-plugin=mysql_native_password
-    environment:
-      MYSQL_ROOT_PASSWORD: '1'
-      MYSQL_DATABASE: base
-      MYSQL_USER: 'base'
-      MYSQL_PASSWORD: '1'
-      LANG: C.UTF-8
+  mongo-0:
+    container_name: mongo-primary
+    image: mongo
     ports:
-      - 3315:3306
+      - "27001:27017"
+    environment:
+      MONGO_INITDB_REPLICASET: my-mongo-set
+    command: mongod --replSet my-mongo-set
+    # volumes: # - ./mongodb/primary:/data/db
+    restart: always
+    networks:
+      - mongo_replica
+
+  mongo-1:
+    container_name: mongo-replica-1
+    image: mongo
+
+    ports:
+      - "27002:27017"
+    environment:
+      MONGO_INITDB_REPLICASET: my-mongo-set
+    command: mongod --replSet my-mongo-set
+    # volumes: # - ./mongodb/replica1:/data/db
+    restart: always
+    networks:
+      - mongo_replica
+
+  mongo-2:
+    container_name: mongo-replica-2
+    image: mongo
+    ports:
+      - "27003:27017"
+    environment:
+      MONGO_INITDB_REPLICASET: my-mongo-set
+    command: mongod --replSet my-mongo-set
+    # volumes: # - ./mongodb/replica2:/data/db
+    restart: always
+    networks:
+      - mongo_replica
+
+  mongoinit:
+    image: mongo
+    # this container will exit after executing the command
+    restart: "no"
+    depends_on:
+      - mongo-0
+      - mongo-1
+      - mongo-2
+    command: >
+      mongo --host mongo1:27017 --eval  ' db = (new Mongo("localhost:27017")).getDB("test"); var config = { "_id" : "my-mongo-set", "members" : [ {
+        "_id" : 0,
+        "host" : "mongo-0:27017"
+      }, {
+        "_id" : 1,
+        "host" : "mongo-1:27017"
+      },  {
+        "_id" : 2,
+        "host" : "mongo-2:27017"
+      } ] }; rs.initiate(config, {force: true}); '   
 
   redis:
     image: 'redis:6-alpine'
-    container_name: base-redis
+    container_name: fashion-redis
     ports:
-      - 6385:6379
+      - 6378:6379
+    command: redis-server --save 20 1 --loglevel warning
 
-  # zookeeper:
-  #   image: 'bitnami/zookeeper:3.6.2'
-  #   container_name: pepper-zookeeper
-  #   ports:
-  #     - 2190:2181
-  #   environment:
-  #     - ALLOW_ANONYMOUS_LOGIN=yes
+  adapter:
+    image: "redislabs/prometheus-redistimeseries-adapter:master"
+    command:
+      [
+        "-redis-address",
+        "redis:6378",
+        "-web.listen-address",
+        "0.0.0.0:9201"
+      ]
 
-  # kafka:
-  #   image: 'bitnami/kafka:2.6.0'
-  #   container_name: pepper-kafka
-  #   ports:
-  #     - 9100:9100
-  #   environment:
-  #     - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-  #     - ALLOW_PLAINTEXT_LISTENER=yes
-  #     - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
-  #     - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9100
-  #     - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:9100
-  #     - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
-  #     - KAFKA_CFG_REPLICA_FETCH_MAX_BYTES=10485760
-  #     - KAFKA_CFG_MESSAGE_MAX_BYTES=10485760
-  #   depends_on:
-  #     - zookeeper
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    ports:
+      - 3000:3000
+  # volumes:
+  #   mongo-0:
+  #   mongo-1:
+  #   mongo-2:
 
-  # kafdrop:
-  #   image: obsidiandynamics/kafdrop
-  #   container_name: pepper-kafdrop
-  #   restart: "no"
-  #   ports:
-  #     - "9001:9000"
-  #   environment:
-  #     KAFKA_BROKERCONNECT: "kafka:9092"
-  #     JVM_OPTS: "-Xms160M -Xmx480M -Xss1800K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
-  #   depends_on:
-  #     - "kafka"
+
+networks:
+  mongo_replica:
+
+
