@@ -1,111 +1,108 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types, UpdateQuery } from 'mongoose';
+import { Model } from 'mongoose';
 import { User, UserDocument } from './schemas/users.schema';
-
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcryptjs';
-import { ChangeAvatarDto } from './dto/change-avatar.dto';
-
-import { UpdateProfileDto } from './dto/update-profile.dto';
-
-// import { UpdateProfileNameDto } from './dto/update-profile-name.dto';
 import { UserRole } from 'src/shares/enums/user.enum';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-// const Filter = require('bad-words');
+import { GetUsersDto } from './dto/get-users.dto';
+import { GetUserDto } from './dto/get-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { httpErrors } from 'src/shares/exceptions';
+import { UserFacebookInfoDto } from '../auth/dto/user-facebook-info.dto';
+import { UserGoogleInfoDto } from '../auth/dto/user-google-info.dto';
 
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async find(): Promise<UserDocument[]> {
-    return this.userModel.find();
-  }
-
-  async findOne(condition: any, selectPassword = false): Promise<User> {
-    if (selectPassword) {
-      return this.userModel.findOne(condition).select('+password').exec();
+  async createUser(createUserDto: CreateUserDto): Promise<any> {
+    const { email, password } = createUserDto;
+    const user = await this.userModel.findOne({ email });
+    if (user) {
+      throw new BadRequestException(httpErrors.ACCOUNT_EXISTED);
     }
-    return this.userModel.findOne(condition).exec();
-  }
 
-  async findById(userId: string): Promise<User> {
-    return this.userModel.findById(userId).exec();
-  }
+    const hashedPassword = await bcrypt.hash(password, 12);
 
-  async findByIdPopulate(userId: string): Promise<User> {
-    return this.userModel.findById(userId).populate('currentTheme').exec();
-  }
-
-  async createUser(createUserDto: CreateUserDto, role: UserRole = UserRole.ADMIN) {
-    try {
-      const hashedPassword = await bcrypt.hash(createUserDto.password, 12);
-      return this.userModel.create({
+    return this.userModel.create(
+      {
         ...createUserDto,
         password: hashedPassword,
-        role,
-      });
-    } catch (err) {
-      throw new InternalServerErrorException(err.message);
-    }
+      },
+      { new: true },
+    );
   }
 
-  async findOrCreateFacebookUser(profile: any) {
+  async findAll(query: GetUsersDto): Promise<User[]> {
+    const { sort, page, limit } = query;
+    return this.userModel
+      .find()
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .sort({ createdAt: sort })
+      .lean();
+  }
+
+  async findByIdAndUpdate(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+    return this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true });
+  }
+
+  async findOne(condition: GetUserDto, selectPassword = false): Promise<User> {
+    if (selectPassword) {
+      return this.userModel.findOne(condition).select('+password').lean().exec();
+    }
+    return this.userModel.findOne(condition).lean().exec();
+  }
+
+  async findById(_id: string): Promise<User> {
+    return this.userModel.findById({ _id }).select('-password').lean();
+  }
+
+  async findOrCreateFacebookUser(profile: UserFacebookInfoDto): Promise<UserDocument> {
     let user = await this.userModel.findOne({ facebookId: profile.id }).exec();
 
     if (user) {
       return this.userModel.findByIdAndUpdate(
         user._id,
         {
-          'avatar.url': profile.picture.data.url,
+          image_url: profile.picture.data.url,
           lastLoginAt: new Date(),
         },
         { new: true },
       );
     }
+
     user = await this.userModel.create({
       facebookId: profile.id,
       name: `${profile.first_name} ${profile.last_name}`,
-      'avatar.url': profile.picture.data.url,
+      image_url: profile.picture.data.url,
       role: UserRole.USER,
       lastLoginAt: new Date(),
     });
   }
 
-  async findByIdAndUpdate(userId: string | Types.ObjectId, update?: UpdateQuery<UserDocument>) {
-    return this.userModel.findByIdAndUpdate(userId, update, { new: true });
-  }
+  async findOrCreateGoogleUser(profile: UserGoogleInfoDto): Promise<UserDocument> {
+    const { sub, picture, given_name, family_name } = profile.data;
+    let user = await this.userModel.findOne({ googleId: sub }).exec();
 
-  async updateProfile(userId: string, updateProfileDto: UpdateProfileDto) {
-    const update = {};
-    if (updateProfileDto.name) {
-      update['name'] = updateProfileDto.name;
+    if (user) {
+      return this.userModel.findByIdAndUpdate(
+        user._id,
+        {
+          image_url: picture,
+          lastLoginAt: new Date(),
+        },
+        { new: true },
+      );
     }
-    if (updateProfileDto.email) {
-      update['email'] = updateProfileDto.email;
-    }
-    return this.userModel.findByIdAndUpdate(userId, update, { new: true });
-  }
 
-  // async updateName(userId: string, data: UpdateProfileNameDto) {
-  //   const { name } = data;
-  //   const filter = new Filter();
-  //   const cleanName = filter.clean(name.trim());
-  //   if (cleanName !== name) {
-  //     throw new HTTP(ERR.E_0104, { property: 'Name' });
-  //   }
-  //   return await this.userModel.findByIdAndUpdate(
-  //     userId,
-  //     {
-  //       name: cleanName,
-  //     },
-  //     { new: true },
-  //   );
-  // }
-
-  async changeAvatar(userId: string, changeAvatarDto: ChangeAvatarDto) {
-    const { avatarId } = changeAvatarDto;
-    return this.userModel.findByIdAndUpdate(userId, { 'avatar.id': avatarId }, { new: true });
+    user = await this.userModel.create({
+      googleId: sub,
+      name: `${given_name} ${family_name}`,
+      image_url: picture,
+      role: UserRole.USER,
+      lastLoginAt: new Date(),
+    });
   }
 }

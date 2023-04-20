@@ -72,4 +72,16 @@ export const httpErrors = {
     message: 'file not found.',
     code: 'FILE_00001',
   },
+
+  // facebook error
+  FACEBOOK_TOKEN_INVALID_OR_EXPIRES: {
+    message: 'Access token is invalid or expires.',
+    code: 'FACEBOOK_00000',
+  },
+
+  // google error
+  GOOGLE_TOKEN_INVALID_OR_EXPIRES: {
+    message: 'Access token is invalid or expires.',
+    code: 'GOOGLE_00000',
+  },
 };

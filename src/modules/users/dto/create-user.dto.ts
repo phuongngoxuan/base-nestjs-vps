@@ -1,22 +1,29 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsEmail } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
   @ApiProperty({
     required: true,
-    example: 'anh Hoi dep trai',
+    example: 'nate json',
   })
   @IsNotEmpty()
-  @IsString()
-  readonly name: string;
+  name: string;
 
   @ApiProperty({
     required: true,
-    example: 'anhhoideptrai@gmail.com',
+    example: 'Ha Noi',
   })
   @IsNotEmpty()
-  @IsEmail()
-  readonly email: string;
+  address: string;
+
+  @IsNotEmpty({ message: 'Email address is required' })
+  @IsEmail({}, { message: 'Invalid email address' })
+  @ApiProperty({
+    example: 'john.doe@example.com',
+    description: 'The email address of the user',
+    format: 'email',
+  })
+  email: string;
 
   @ApiProperty({
     required: true,
@@ -24,4 +31,11 @@ export class CreateUserDto {
   })
   @IsNotEmpty()
   readonly password: string;
+
+  @ApiProperty({
+    required: true,
+    example: 'https://resq-bucket-2.s3.amazonaws.com/test/1681115579264_c49717abc07d480.jpeg',
+  })
+  @IsNotEmpty()
+  image_url: string;
 }

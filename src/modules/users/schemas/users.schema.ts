@@ -12,9 +12,9 @@ export class User {
   facebookId: string;
 
   @Prop({ type: String, unique: true, sparse: true })
-  instagramId: string;
+  googleId: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String })
   name: string;
 
   @Prop({
@@ -34,7 +34,7 @@ export class User {
   role: UserRole;
 
   @Prop({ default: '' })
-  avatar: string;
+  image_url: string;
 
   @Prop({ type: Boolean, default: false })
   banned: boolean;

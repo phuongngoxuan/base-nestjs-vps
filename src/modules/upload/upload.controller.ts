@@ -1,6 +1,6 @@
 import { Controller, Post, Get, UploadedFile, UseInterceptors, Query } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation } from '@nestjs/swagger';
 import { UploadService } from './upload.service';
 import { UploadDto } from './dto/upload.dto';
 
@@ -9,6 +9,7 @@ export class UploadController {
   constructor(private uploadService: UploadService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Upload Image' })
   @ApiBearerAuth()
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -28,6 +29,7 @@ export class UploadController {
   }
 
   @Get()
+  @ApiOperation({ summary: 'Upload Image with url' })
   generateUrlUpload(@Query() uploadDto: UploadDto): any {
     return this.uploadService.generateToken(uploadDto);
   }
