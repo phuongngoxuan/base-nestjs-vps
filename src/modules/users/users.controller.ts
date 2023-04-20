@@ -14,6 +14,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
+  @ApiOperation({ summary: 'Get all user' })
   async findAll(@Query() query: GetUsersDto): Promise<User[]> {
     return this.usersService.findAll(query);
   }
@@ -25,6 +26,7 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Update User by id' })
   @ApiResponse({ status: 200, description: 'The user has been successfully updated.' })
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<User> {
     return this.usersService.findByIdAndUpdate(id, updateUserDto);
