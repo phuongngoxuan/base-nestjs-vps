@@ -10,8 +10,8 @@ export class PaginationDto {
   })
   @Transform(({ value }) => String(value))
   @IsOptional()
-  @IsIn(['DESC', 'ASC'])
-  sort?: 'ASC' | 'DESC' = 'DESC';
+  @IsIn(['desc', 'asc'])
+  sort?: 'desc' | 'asc' = 'desc';
 
   @ApiPropertyOptional({ example: 1 })
   @Transform(({ value }) => Number(value))

@@ -5,7 +5,6 @@ import * as redisStore from 'cache-manager-redis-store';
 import { ConsoleModule } from 'nestjs-console';
 import { mongodb } from 'src/configs/database.config';
 import { redisConfig } from 'src/configs/redis.config';
-// import { AuthModule } from 'src/modules/auth/auth.module';
 import { EventModule } from 'src/modules/events/event.module';
 import { HelloKafka } from 'src/modules/hello-kafka/hello-kafka.module';
 import { HttpClientModule } from 'src/shares/http-clients/http.module';
@@ -14,6 +13,7 @@ import { UploadModule } from './modules/upload/upload.module';
 import { AwsModule } from './modules/aws/aws.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 const Modules = [
   Logger,
@@ -32,7 +32,7 @@ const Modules = [
     isGlobal: true,
   }),
   EventModule,
-  // AuthModule,
+  AuthModule,
   HelloKafka,
   AwsModule,
   UploadModule,

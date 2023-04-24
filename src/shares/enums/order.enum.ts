@@ -1,5 +1,3 @@
-import { enumize } from 'src/shares/enums/enumize';
-
 export enum OrderSide {
   BUY = 'BUY',
   SELL = 'SELL',
@@ -27,15 +25,11 @@ export enum OrderStopType {
   TAKE_PROFIT_MARKET = 'TAKE_PROFIT_MARKET',
 }
 
-export const OrderStopCondition = enumize();
-
 export enum OrderTimeInForce {
   GTC = 'GTC',
   IOC = 'IOC',
   FOK = 'FOK',
 }
-
-export const OrderPairType = enumize();
 
 export enum OrderTrigger {
   LAST = 'LAST',

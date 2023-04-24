@@ -1,5 +1,7 @@
-import { enumize } from 'src/shares/enums/enumize';
+export enum KafkaTopics {
+  HELLO_TOPIC = 'HELLO_TOPIC',
+}
 
-export const KafkaTopics = enumize('HELLO_TOPIC');
-
-export const KafkaGroups = enumize('HELLO_GROUP');
+export enum KafkaGroups {
+  HELLO_GROUP = 'HELLO_GROUP',
+}
