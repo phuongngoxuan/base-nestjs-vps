@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { HelloKafkaService } from 'src/modules/hello-kafka/hello-kafka.service';
 
 @Controller('hello-kafka')
@@ -8,6 +8,7 @@ export class HelloKafkaController {
   constructor(private helloKafkaService: HelloKafkaService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Test hello kafka' })
   @ApiBody({
     required: true,
     description: `Data to push to kafka. Example { "data" : "hello" } `,

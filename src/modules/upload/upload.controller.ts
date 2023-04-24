@@ -1,10 +1,11 @@
 import { Controller, Post, Get, UploadedFile, UseInterceptors, Query } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UploadService } from './upload.service';
 import { UploadDto } from './dto/upload.dto';
 
 @Controller('upload')
+@ApiTags('Upload')
 export class UploadController {
   constructor(private uploadService: UploadService) {}
 

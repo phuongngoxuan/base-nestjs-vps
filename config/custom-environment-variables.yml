@@ -42,3 +42,11 @@ facebook:
 
 google:
   base_api: GOOGLE_BASE_API
+
+paypal:
+  mode: PAYPAL_MODE
+  client_id: PAYPAL_CLIENT_ID
+  client_secret: PAYPAL_CLIENT_SECRET
+  return_url: PAYPAL_RETURN_URL
+  cancel_url: PAYPAL_CANCEL_URL
+  base_url: BASE_URL
