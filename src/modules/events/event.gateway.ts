@@ -2,7 +2,7 @@ import { Logger } from '@nestjs/common';
 import { OnGatewayConnection, OnGatewayDisconnect, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { verify } from 'jsonwebtoken';
 import { Server, Socket } from 'socket.io';
-import { jwtConstants } from 'src/modules/auth/auth.constants';
+import { JWT_CONSTANTS } from 'src/modules/auth/auth.constants';
 
 @WebSocketGateway()
 export class EventGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -17,7 +17,7 @@ export class EventGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const token = client.handshake.query?.authorization;
     if (token) {
       try {
-        const payload = (verify(token, jwtConstants.accessTokenSecret) as unknown) as { userId: number };
+        const payload = (verify(token, JWT_CONSTANTS.accessTokenSecret) as unknown) as { userId: number };
         client.join(payload.userId);
         this.logger.log(`User ${payload.userId} connected: ${client.id}`);
       } catch (e) {

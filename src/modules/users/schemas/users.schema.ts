@@ -15,6 +15,9 @@ export class User {
   googleId: string;
 
   @Prop({ type: String })
+  display_name: string;
+
+  @Prop({ type: String })
   name: string;
 
   @Prop({

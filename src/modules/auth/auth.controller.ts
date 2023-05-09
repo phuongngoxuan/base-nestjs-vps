@@ -14,6 +14,9 @@ import { ObjectId } from 'mongoose';
 import { User } from '@sentry/node';
 import { LoginFacebookDto } from './dto/login-facebook.dto';
 import { LoginGoogleDto } from './dto/login-google.dto';
+import { SignUpDto } from './dto/sign-up.dto';
+import { VerifyUserDto } from './dto/verification-user.dto';
+// import ForgotPasswordDto from './dto/forgotPassword.dto';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -31,11 +34,36 @@ export class AuthController {
     };
   }
 
+  @Post('sign-up')
+  @ApiOperation({ summary: 'Sign Up with gmail' })
+  async signUp(@Body() signUpDto: SignUpDto): Promise<User> {
+    return this.authService.signUp(signUpDto);
+  }
+
+  @Post('verification')
+  @ApiOperation({ summary: 'Verification user' })
+  async verificationUser(@Body() verifyUserDto: VerifyUserDto): Promise<User> {
+    return this.authService.verificationUser(verifyUserDto);
+  }
+
   @Post('login')
   @ApiOperation({ summary: 'Login with gmail' })
   async login(@Body() loginDto: LoginDto): Promise<ResponseLogin> {
     return this.authService.login(loginDto);
   }
+
+  // @Post('forgot-password')
+  // forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto): Promise<any> {
+  //   return this.authService.forgotPassword(forgotPasswordDto);
+  // }
+  // @Post('change-password-by-code')
+  // changePasswordByCode(@Body() changePasswordByCode: ChangePasswordByCode) {
+  //   return this.administratorsService.changePasswordByCode(changePasswordByCode);
+  // }
+  // @Post('change-password')
+  // changePassword(@Body() changePasswordDto: ChangePasswordDto) {
+  //   return this.administratorsService.changePassword(changePasswordDto);
+  // }
 
   @Post('refresh-access-token')
   @ApiOperation({ summary: 'Get new Access Token' })

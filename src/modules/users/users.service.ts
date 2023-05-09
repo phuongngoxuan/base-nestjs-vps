@@ -16,7 +16,7 @@ import { UserGoogleInfoDto } from '../auth/dto/user-google-info.dto';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async createUser(createUserDto: CreateUserDto): Promise<any> {
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
     const { email, password } = createUserDto;
     const user = await this.userModel.findOne({ email });
     if (user) {
@@ -25,13 +25,10 @@ export class UsersService {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    return this.userModel.create(
-      {
-        ...createUserDto,
-        password: hashedPassword,
-      },
-      { new: true },
-    );
+    return this.userModel.create({
+      ...createUserDto,
+      password: hashedPassword,
+    });
   }
 
   async findAll(query: GetUsersDto): Promise<User[]> {

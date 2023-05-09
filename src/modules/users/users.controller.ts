@@ -1,7 +1,6 @@
 import { Controller, Get, Param, Patch, Query, Post, Body } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
-import { UserDocument } from './schemas/users.schema';
 import { GetUsersDto } from './dto/get-users.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -21,7 +20,7 @@ export class UsersController {
 
   @Post()
   @ApiOperation({ summary: 'Create user' })
-  async create(@Body() createUserDto: CreateUserDto): Promise<UserDocument> {
+  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.createUser(createUserDto);
   }
 

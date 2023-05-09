@@ -5,7 +5,7 @@ import { IsIn, IsInt, IsOptional, IsPositive, Max } from 'class-validator';
 export class PaginationDto {
   @ApiPropertyOptional({
     required: true,
-    example: 'DESC',
+    example: 'desc',
     description: '',
   })
   @Transform(({ value }) => String(value))

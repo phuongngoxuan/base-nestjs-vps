@@ -12,8 +12,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { code, message, ...rest }: any = exception.getResponse();
 
-    console.log(`exception.getResponse()`, exception.getResponse());
-
     response.status(status).json({
       code: code || 'SOME_THING_WENT_WRONG',
       statusCode: status || HttpStatus.INTERNAL_SERVER_ERROR,

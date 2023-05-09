@@ -42,3 +42,8 @@ facebook:
 
 google:
   base_api: GOOGLE_BASE_API
+
+server: 
+  web_url: WEB_URL
+
+sign_up_expiration_time: SIGN_UP_EXPIRATION_TIME
