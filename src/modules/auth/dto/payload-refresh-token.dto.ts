@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongoose';
 
-export class UserRefreshTokenDto {
+export class PayloadRefreshTokenDto {
   userId: ObjectId;
   date: number;
   iat: number;

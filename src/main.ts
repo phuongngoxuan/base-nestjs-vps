@@ -14,6 +14,7 @@ import { ResponseTransformInterceptor } from 'src/shares/interceptors/response.i
 import { SentryInterceptor } from 'src/shares/interceptors/sentry.interceptor';
 import { BodyValidationPipe } from 'src/shares/pipes/body.validation.pipe';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { IoAdapter } from '@nestjs/platform-socket.io';
 
 const appPort = config.get<number>('app.port');
 const dnsSentry = config.get<string>('sentry_dns');
@@ -53,6 +54,7 @@ async function bootstrap(): Promise<void> {
   });
 
   app.use(helmet());
+  app.useWebSocketAdapter(new IoAdapter(app));
 
   await app.listen(appPort);
 

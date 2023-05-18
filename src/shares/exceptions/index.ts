@@ -52,6 +52,19 @@ export const httpErrors = {
     message: 'Too much request',
     code: 'USER_00028',
   },
+  USER_WRONG_PASSWORD: {
+    message: 'Password is incorrect',
+    code: 'USER_00029',
+  },
+  USER_CODE_INVALID: {
+    message: 'Verification code is invalid',
+    code: 'USER_00030',
+  },
+
+  USER_EXPIRED_CODE: {
+    message: `You've entered an incorrect code. Please note that current code will be expired if you enter it wrong 5 times in a row`,
+    code: 'USER_00031',
+  },
 
   // order error
   ORDER_NOT_FOUND: {

@@ -1,86 +1,20 @@
 # Use root/example as user/password credentials
-version: "3.1"
+version: '3.1'
 
 services:
-  mongo-0:
-    container_name: mongo-primary
-    image: mongo
-    ports:
-      - "27001:27017"
-    environment:
-      MONGO_INITDB_REPLICASET: my-mongo-set
-    command: mongod --replSet my-mongo-set
-    # volumes: # - ./mongodb/primary:/data/db
-    restart: always
-    networks:
-      - mongo_replica
 
-  mongo-1:
-    container_name: mongo-replica-1
+  mongodb:
+    container_name: database-mongo-ecommerce
     image: mongo
-
-    ports:
-      - "27002:27017"
-    environment:
-      MONGO_INITDB_REPLICASET: my-mongo-set
-    command: mongod --replSet my-mongo-set
-    # volumes: # - ./mongodb/replica1:/data/db
     restart: always
-    networks:
-      - mongo_replica
-
-  mongo-2:
-    container_name: mongo-replica-2
-    image: mongo
     ports:
-      - "27003:27017"
+      - "27017:27017"
     environment:
-      MONGO_INITDB_REPLICASET: my-mongo-set
-    command: >
-      mongod --replSet my-mongo-set    
-    # volumes: # - ./mongodb/replica2:/data/db
-    restart: always
-    networks:
-      - mongo_replica
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
 
   redis:
     image: 'redis:6-alpine'
     container_name: fashion-redis
     ports:
-      - 6378:6379
-    command: redis-server --save 20 1 --loglevel warning
-
-  adapter:
-    image: "redislabs/prometheus-redistimeseries-adapter:master"
-    command:
-      [
-        "-redis-address",
-        "redis:6378",
-        "-web.listen-address",
-        "0.0.0.0:9201"
-      ]
-
-  grafana:
-    container_name: grafana
-    image: grafana/grafana:latest
-    ports:
-      - 3000:3000
-  # volumes:
-  #   mongo-0:
-  #   mongo-1:
-  #   mongo-2:
-
-
-networks:
-  mongo_replica:
-
-    # ' docker exec -it mongo-primary mongosh;  var config = { "_id" : "my-mongo-set", "members" : [ {
-    #         "_id" : 0,
-    #         "host" : "mongo-0:27017"
-    #       }, {
-    #         "_id" : 1,
-    #         "host" : "mongo-1:27017"
-    #       },  {
-    #         "_id" : 2,
-    #         "host" : "mongo-2:27017"
-    #       } ] }; rs.initiate(config, {force: true}); '
+      - 6379:6379

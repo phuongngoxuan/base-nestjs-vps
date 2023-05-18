@@ -18,11 +18,12 @@ kafka:
 sentry_dns: SENTRY_DNS
 
 mail:
+  host: MAIL_HOST
+  port: MAIL_PORT
   account: MAIL_ACCOUNT
   password: MAIL_PASSWORD
   from: MAIL_FROM
   service: MAIL_SERVICE
-  domain: MAIL_DOMAIN
   enable: MAIL_ENABLE
 
 aws_config:
@@ -47,3 +48,4 @@ server:
   web_url: WEB_URL
 
 sign_up_expiration_time: SIGN_UP_EXPIRATION_TIME
+forgot_password_expiration_time: FORGOT_PASSWORD_EXPIRATION_TIME

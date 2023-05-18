@@ -1,8 +1,9 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 import { JWT_CONSTANTS } from '../auth.constants';
+import { PayloadRefreshTokenDto } from '../dto/payload-refresh-token.dto';
 
 @Injectable()
 export class RtStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
@@ -14,10 +15,11 @@ export class RtStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
     });
   }
 
-  async validate(req: Request, payload: any) {
+  async validate(req: Request, payload: PayloadRefreshTokenDto): Promise<any> {
     const refreshToken = req.get('authorization').replace('Bearer', '').trim();
-    console.log('payload');
-    console.log(payload);
+    if (!refreshToken) {
+      throw new UnauthorizedException('UNAUTHORIZED');
+    }
 
     return {
       ...payload,

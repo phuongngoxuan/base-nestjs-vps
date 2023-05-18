@@ -6,6 +6,6 @@ export const KAFKA_CONFIG = {
 };
 
 export const kafka = new Kafka({
-  clientId: 'sota-dex',
+  clientId: 'dex',
   brokers: KAFKA_CONFIG.brokers.split(','),
 });

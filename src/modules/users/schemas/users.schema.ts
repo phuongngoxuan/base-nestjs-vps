@@ -2,8 +2,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId } from 'mongoose';
 import { Exclude, Transform } from 'class-transformer';
 import { UserRole } from 'src/shares/enums/user.enum';
+export const USER_MODEL='users';
 
-@Schema({ timestamps: true, collection: 'users' })
+@Schema({ timestamps: true, collection: USER_MODEL })
 export class User {
   @Transform(({ value }) => value.toString())
   _id: ObjectId;

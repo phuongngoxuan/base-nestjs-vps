@@ -12,12 +12,13 @@ import { KafkaModule } from 'src/shares/kafka-client/kafka-module';
 import { UploadModule } from './modules/upload/upload.module';
 import { AwsModule } from './modules/aws/aws.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UsersModule } from './modules/users/users.module';
+import { UsersModule } from './modules/users/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { MailModule } from './modules/mail/mail.module';
+import { MessageModule } from './modules/message/message.module';
 
 const Modules = [
   Logger,
-  // Connect Mongo
   MongooseModule.forRoot(mongodb.uri, mongodb.options),
   ScheduleModule.forRoot(),
   KafkaModule,
@@ -37,5 +38,7 @@ const Modules = [
   AwsModule,
   UploadModule,
   UsersModule,
+  MailModule,
+  MessageModule
 ];
 export default Modules;

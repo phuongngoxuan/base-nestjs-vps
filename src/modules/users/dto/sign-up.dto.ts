@@ -30,3 +30,15 @@ export class SignUpDto {
   @IsNotEmpty()
   readonly display_name: string;
 }
+
+export interface SignUpInterface {
+  email: string;
+  password: string;
+  name: string;
+  display_name: string;
+  code: string;
+}
+
+export interface SignUpCacheInterface extends SignUpInterface {
+  attempt: number;
+}
