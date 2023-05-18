@@ -2,15 +2,31 @@ import { Controller, Get, Param, Patch, Query, Post, Body } from '@nestjs/common
 import { ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { GetUsersDto } from './dto/get-users.dto';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { GetUserByIdDto } from './dto/get-user-id.dto';
-import { User } from '@sentry/node';
+import ChangePasswordDto from './dto/change-password.dto';
+import ChangePasswordByCodeDto from './dto/change-password-by-code.dto';
+import { User } from './schemas/users.schema';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { SignUpDto } from './dto/sign-up.dto';
+import { SignUpByCodeDto } from './dto/sign-up-by-code.dto';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @Post('sign-up')
+  @ApiOperation({ summary: 'Sign Up with gmail' })
+  async signUp(@Body() signUpDto: SignUpDto): Promise<void> {
+    await this.usersService.signUp(signUpDto);
+  }
+
+  @Post('sign-up-by-code')
+  @ApiOperation({ summary: 'Verification user' })
+  async signUpByCode(@Body() signUpByCodeDto: SignUpByCodeDto): Promise<void> {
+    return this.usersService.signUpByCode(signUpByCodeDto);
+  }
 
   @Get()
   @ApiOperation({ summary: 'Get all user' })
@@ -18,10 +34,22 @@ export class UsersController {
     return this.usersService.findAll(query);
   }
 
-  @Post()
-  @ApiOperation({ summary: 'Create user' })
-  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.usersService.createUser(createUserDto);
+  @Post('forgot-password')
+  @ApiOperation({ summary: 'Get code change password by send email' })
+  forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto): Promise<void> {
+    return this.usersService.forgotPassword(forgotPasswordDto);
+  }
+
+  @Post('change-password-by-code')
+  @ApiOperation({ summary: 'Change User password by code' })
+  changePasswordByCode(@Body() changePasswordByCodeDto: ChangePasswordByCodeDto): Promise<void> {
+    return this.usersService.changePasswordByCode(changePasswordByCodeDto);
+  }
+
+  @Post('change-password')
+  @ApiOperation({ summary: 'Change User password' })
+  changePassword(@Body() changePasswordDto: ChangePasswordDto): Promise<void> {
+    return this.usersService.changePassword(changePasswordDto);
   }
 
   @Patch(':id')

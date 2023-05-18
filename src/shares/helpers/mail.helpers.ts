@@ -9,8 +9,6 @@ const access_key_id = config.get<string>('aws_config.aws_access_key_id');
 const secret_access_key = config.get<string>('aws_config.aws_secret_access_key');
 const region_name = config.get<string>('aws_config.aws_bucket_name');
 
-// get info config
-
 @Injectable()
 export class EmailService {
   async sendEmail(emailAddress: string, subject: string, htmlBody: string, from?: string): Promise<any> {
@@ -27,7 +25,7 @@ export class EmailService {
 
     // send mail with defined transport object
     const info = await transporter.sendMail({
-      from: from || 'Fashion Icons', // sender address
+      from: from || 'Commerce', // sender address
       to: emailAddress, // list of receivers
       subject: subject, // Subject line
       // text: "Hello world?", // plain text body

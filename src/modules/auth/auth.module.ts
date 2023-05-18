@@ -8,7 +8,6 @@ import { RtStrategy } from './strategies/rt.strategy';
 import { AtStrategy } from './strategies/at.strategy';
 import { UsersModule } from '../users/users.module';
 import { HttpModule } from '@nestjs/axios';
-import { EmailService } from 'src/shares/helpers/mail.helpers';
 
 @Module({
   imports: [
@@ -25,7 +24,7 @@ import { EmailService } from 'src/shares/helpers/mail.helpers';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, AtStrategy, RtStrategy, EmailService],
+  providers: [AuthService, AtStrategy, RtStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}

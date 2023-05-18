@@ -14,6 +14,7 @@ import { AwsModule } from './modules/aws/aws.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { MailModule } from './modules/mail/mail.module';
 
 const Modules = [
   Logger,
@@ -37,5 +38,6 @@ const Modules = [
   AwsModule,
   UploadModule,
   UsersModule,
+  MailModule,
 ];
 export default Modules;

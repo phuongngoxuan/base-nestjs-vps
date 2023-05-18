@@ -9,10 +9,9 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Cache } from 'cache-manager';
-import { AUTH_CACHE_PREFIX, SIGN_UP_CACHE, JWT_CONSTANTS, SIGN_UP_EXPIRY } from 'src/modules/auth/auth.constants';
+import { AUTH_CACHE_PREFIX, JWT_CONSTANTS } from 'src/modules/auth/auth.constants';
 import { LoginDto } from 'src/modules/auth/dto/login.dto';
 import { ResponseLogin } from 'src/modules/auth/dto/response-login.dto';
-import * as bcrypt from 'bcryptjs';
 import { ResponseRefreshTokenDto } from './dto/response-refresh-token.dto';
 import { UserRefreshTokenDto } from './dto/user-refresh-token.dto';
 import { httpErrors } from 'src/shares/exceptions';
@@ -25,16 +24,9 @@ import { catchError, lastValueFrom, map } from 'rxjs';
 import { UserFacebookInfoDto } from './dto/user-facebook-info.dto';
 import { UserGoogleInfoDto } from './dto/user-google-info.dto';
 import { LoginGoogleDto } from './dto/login-google.dto';
-import { SignUpDto } from './dto/sign-up.dto';
-// import { readFileSync } from 'fs';
-import { EmailService } from 'src/shares/helpers/mail.helpers';
-import { generateHash } from 'src/shares/helpers/bcrypt';
-import { VerifyUserDto } from './dto/verification-user.dto';
-import { User } from '../users/schemas/users.schema';
-import { randomCodeNumber } from 'src/shares/helpers/utils';
+import { validateHash } from 'src/shares/helpers/bcrypt';
 const baseFacebookUrl = config.get<string>('facebook.graph_api');
 const baseGoogleUrl = config.get<string>('google.base_api');
-// const webUrl = config.get<string>('server.web_url');
 @Injectable()
 export class AuthService {
   constructor(
@@ -42,65 +34,7 @@ export class AuthService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private jwtService: JwtService,
     private httpService: HttpService,
-    private emailService: EmailService,
   ) {}
-
-  async verificationUser(verifyUserDto: VerifyUserDto): Promise<User> {
-    const { code, email } = verifyUserDto;
-    console.log(verifyUserDto);
-    const verifyUserCache = await this.cacheManager.get<string>(`${SIGN_UP_CACHE}${email}`);
-
-    const userInfo = JSON.parse(verifyUserCache);
-    if (userInfo?.code !== code) {
-      throw new BadRequestException(httpErrors.USER_EMAIL_VERIFY_FAIL);
-    }
-    delete verifyUserCache['code'];
-
-    if (!verifyUserCache) {
-      throw new BadRequestException(httpErrors.USER_EMAIL_VERIFY_FAIL);
-    }
-
-    return await this.userService.createUser(userInfo);
-  }
-
-  async signUp(signUpDto: SignUpDto): Promise<any> {
-    const { email, password, name, display_name } = signUpDto;
-    // check user info cache
-    const user = await this.userService.findOne({ email: email });
-    if (user) {
-      throw new BadRequestException('The email already exist!');
-    }
-
-    // send email
-    // console.log(__dirname + '/email-template/signUp.html');
-    // let htmlBody = await readFileSync(__dirname + '/email-template/signUp.html').toString();
-    // htmlBody = htmlBody.replace(/\[Link\]/g, webUrl);
-    // htmlBody = htmlBody.replace('[Invited email]', email);
-    // htmlBody = htmlBody.replace('[User name]', name || 'N/A');
-    // const subject = 'FASHION ICONS - NEW SIGN-UP TO EXCLUSIVE ACCESS';
-    // this.emailService.SESSendEmail(email, subject, htmlBody);
-
-    // generate code 6 number
-    const code = randomCodeNumber(6);
-    const { hashPassword } = await generateHash(password);
-    const newUser = {
-      email,
-      password: hashPassword,
-      name,
-      display_name,
-      code,
-    };
-
-    // cache user info wait for code verification
-    await this.cacheManager.set<string>(`${SIGN_UP_CACHE}${email}`, JSON.stringify(newUser), {
-      ttl: SIGN_UP_EXPIRY,
-    });
-
-    return {
-      code,
-      email,
-    };
-  }
 
   async login(loginDto: LoginDto): Promise<ResponseLogin> {
     const { email, password } = loginDto;
@@ -112,7 +46,7 @@ export class AuthService {
     }
 
     // verify user password
-    if (!(await bcrypt.compare(password, user.password))) {
+    if (!(await validateHash(password, user.password))) {
       throw new UnauthorizedException(httpErrors.UNAUTHORIZED);
     }
 
