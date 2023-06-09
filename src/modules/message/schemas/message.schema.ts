@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, SchemaTypes } from 'mongoose';
 import { Transform } from 'class-transformer';
-import { USER_MODEL } from 'src/modules/users/schemas/users.schema';
+import { USER_MODEL } from 'src/modules/user/schemas/user.schema';
 import { CONVERSATIONS_MODEL } from './conversation.schema';
 export const MESSAGES_MODEL = 'messages';
 

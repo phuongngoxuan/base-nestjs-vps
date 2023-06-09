@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { EventGateway } from 'src/modules/events/event.gateway';
-import { UsersModule } from '../users/user.module';
+import { UsersModule } from '../user/user.module';
 import { AuthModule } from '../auth/auth.module';
 import { MessageModule } from '../message/message.module';
 

@@ -97,4 +97,15 @@ export const httpErrors = {
     message: 'Access token is invalid or expires.',
     code: 'GOOGLE_00000',
   },
+
+  // category error
+  CATEGORY_EXISTED: {
+    message: 'Category already existed.',
+    code: 'CATEGORY_00000',
+  },
+
+  CATEGORY_NOT_FOUND: {
+    message: 'Category not found.',
+    code: 'CATEGORY_00001',
+  },
 };

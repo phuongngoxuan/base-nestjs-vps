@@ -6,7 +6,7 @@ import * as redisStore from 'cache-manager-redis-store';
 import { redisConfig } from 'src/configs/redis.config';
 import { RtStrategy } from './strategies/rt.strategy';
 import { AtStrategy } from './strategies/at.strategy';
-import { UsersModule } from '../users/user.module';
+import { UsersModule } from '../user/user.module';
 import { HttpModule } from '@nestjs/axios';
 
 @Module({

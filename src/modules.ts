@@ -12,10 +12,12 @@ import { KafkaModule } from 'src/shares/kafka-client/kafka-module';
 import { UploadModule } from './modules/upload/upload.module';
 import { AwsModule } from './modules/aws/aws.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UsersModule } from './modules/users/user.module';
+import { UsersModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MailModule } from './modules/mail/mail.module';
 import { MessageModule } from './modules/message/message.module';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { OrderModule } from './modules/order/order.module';
 
 const Modules = [
   Logger,
@@ -39,6 +41,8 @@ const Modules = [
   UploadModule,
   UsersModule,
   MailModule,
-  MessageModule
+  MessageModule,
+  CategoriesModule,
+  OrderModule
 ];
 export default Modules;

@@ -2,7 +2,7 @@ import { BadRequestException, Inject, Injectable, CACHE_MANAGER } from '@nestjs/
 import { Cache } from 'cache-manager';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User, UserDocument } from './schemas/users.schema';
+import { User, UserDocument } from './schemas/user.schema';
 import { UserRole } from 'src/shares/enums/user.enum';
 import { GetUsersDto } from './dto/get-users.dto';
 import { GetUserDto } from './dto/get-user.dto';

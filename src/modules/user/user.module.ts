@@ -1,7 +1,7 @@
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from './schemas/users.schema';
+import { User, UserSchema } from './schemas/user.schema';
 import { Module, CacheModule } from '@nestjs/common';
 import { EmailService } from 'src/shares/helpers/mail.helpers';
 import * as redisStore from 'cache-manager-redis-store';

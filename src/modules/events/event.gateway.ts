@@ -8,7 +8,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { UserService } from '../users/user.service';
+import { UserService } from '../user/user.service';
 import { AuthService } from '../auth/auth.service';
 import { PayloadAccessTokenDto } from 'src/shares/dtos/payload-access-token.dto';
 import { MessageService } from '../message/message.service';

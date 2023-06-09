@@ -4,7 +4,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JWT_CONSTANTS } from '../auth.constants';
 import express from 'express';
 import { AuthService } from '../auth.service';
-import { UserService } from 'src/modules/users/user.service';
+import { UserService } from 'src/modules/user/user.service';
 import { httpErrors } from 'src/shares/exceptions';
 import { PayloadAccessTokenDto } from 'src/shares/dtos/payload-access-token.dto';
 

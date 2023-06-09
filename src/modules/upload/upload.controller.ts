@@ -1,9 +1,10 @@
 import { Controller, Post, Get, UploadedFile, UseInterceptors, Query } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UploadService } from './upload.service';
 import { UploadDto } from './dto/upload.dto';
 
+@ApiTags('Upload')
 @Controller('upload')
 export class UploadController {
   constructor(private uploadService: UploadService) {}
@@ -24,13 +25,13 @@ export class UploadController {
     },
   })
   @UseInterceptors(FileInterceptor('file'))
-  uploadFile(@UploadedFile() file: Express.Multer.File): any {
-    return this.uploadService.uploadS3(file);
+  async uploadFile(@UploadedFile() file: Express.Multer.File): Promise<void> {
+    await this.uploadService.uploadS3(file);
   }
 
   @Get()
   @ApiOperation({ summary: 'Upload Image with url' })
-  generateUrlUpload(@Query() uploadDto: UploadDto): any {
+  async generateUrlUpload(@Query() uploadDto: UploadDto): Promise<{ upload_url: string; image_url: string }> {
     return this.uploadService.generateToken(uploadDto);
   }
 }

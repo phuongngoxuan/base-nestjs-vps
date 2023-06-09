@@ -4,11 +4,11 @@ import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import * as config from 'config';
 import { randomCodeNumber } from 'src/shares/helpers/utils';
-import { CacheForgotPassword } from '../users/dto/forgot-password.dto';
+import { CacheForgotPassword } from '../user/dto/forgot-password.dto';
 
 import { Cache } from 'cache-manager';
 import { FORGOT_PASSWORD_CACHE, SIGN_UP_CACHE, SIGN_UP_EXPIRY, FORGOT_PASSWORD_EXPIRY } from '../auth/auth.constants';
-import { SignUpCacheInterface, SignUpInterface } from '../users/dto/sign-up.dto';
+import { SignUpCacheInterface, SignUpInterface } from '../user/dto/sign-up.dto';
 
 const mailFrom = config.get<string>('mail.from');
 

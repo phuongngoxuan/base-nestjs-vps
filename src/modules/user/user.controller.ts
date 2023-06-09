@@ -6,7 +6,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { GetUserByIdDto } from './dto/get-user-id.dto';
 import ChangePasswordDto from './dto/change-password.dto';
 import ChangePasswordByCodeDto from './dto/change-password-by-code.dto';
-import { User } from './schemas/users.schema';
+import { User } from './schemas/user.schema';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 import { SignUpByCodeDto } from './dto/sign-up-by-code.dto';

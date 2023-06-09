@@ -7,16 +7,13 @@ import { PayloadRefreshTokenDto } from './dto/payload-refresh-token.dto';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { LoginDto } from 'src/modules/auth/dto/login.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { UserService } from '../users/user.service';
-import { AtGuards } from './guards/at.guard';
+import { UserService } from '../user/user.service';
 import { RtGuards } from './guards/rt.guard';
 import { ObjectId } from 'mongoose';
 import { User } from '@sentry/node';
 import { LoginFacebookDto } from './dto/login-facebook.dto';
 import { LoginGoogleDto } from './dto/login-google.dto';
-import { RolesGuard } from './guards/roles.guard';
-import { Roles } from 'src/shares/decorators/roles.decorator';
-import { UserRole } from 'src/shares/enums/user.enum';
+import { Auth } from 'src/shares/decorators/http.decorators';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -25,9 +22,8 @@ export class AuthController {
   constructor(private readonly authService: AuthService, private readonly userService: UserService) {}
 
   @Get('/current')
+  @Auth()
   @ApiOperation({ summary: 'Get new Access Token' })
-  @Roles(UserRole.ADMIN,UserRole.USER)
-  @UseGuards(AtGuards, RolesGuard)
   async currentUser(@UserID() userId: ObjectId): Promise<User> {
     const user = await this.userService.findById(userId.toString());
     return {
@@ -41,10 +37,10 @@ export class AuthController {
     return this.authService.login(loginDto);
   }
 
+  
   @Post('refresh-access-token')
   @ApiOperation({ summary: 'Get new Access Token' })
   @UseGuards(RtGuards)
-  @ApiBearerAuth('JWT-auth')
   async refreshAccessToken(@GetCurrentUser() user: PayloadRefreshTokenDto): Promise<ResponseRefreshTokenDto> {
     return this.authService.refreshAccessToken(user);
   }
