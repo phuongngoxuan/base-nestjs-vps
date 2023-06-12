@@ -1,21 +1,25 @@
 import { Document, SchemaTypes, Types } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { ProductStatus, ProductType } from 'src/shares/enums/product.enum';
+import { CATEGORIES_MODEL } from 'src/modules/categories/schemas/categories.schema';
+import { SUPPLIER_MODEL } from './supplier.schema';
+import { PARTNER_MODEL } from './partner.schema';
+import { DEVICES_MODEL } from './devices.schema';
+import { MEDIA_MODEL } from 'src/modules/media/schemas/media.schema';
 export const PRODUCTS_MODEL = 'products';
 
 @Schema({ timestamps: true, collection: PRODUCTS_MODEL })
-export class Products {
+export class Product {
   @Prop({ required: true })
   name: string;
 
   @Prop({ required: true })
   code: string;
 
-  // todo relastion
-  @Prop({ required: true })
+  @Prop({ required: false, type: SchemaTypes.ObjectId, index: true, ref: CATEGORIES_MODEL })
   category_id: string;
 
-  // todo relastion
-  @Prop({ required: true })
+  @Prop({ required: false, type: SchemaTypes.ObjectId, index: true, ref: SUPPLIER_MODEL })
   supplier_id: string;
 
   @Prop({ required: true })
@@ -24,12 +28,10 @@ export class Products {
   @Prop({ required: true })
   iccid?: string;
 
-  // todo relastion
-  @Prop({ required: true })
-  partner_id?: string;
+  @Prop({ required: false, type: SchemaTypes.ObjectId, index: true, ref: PARTNER_MODEL })
+  partner_id: string;
 
-  // todo relastion
-  @Prop({ required: true })
+  @Prop({ required: false, type: SchemaTypes.ObjectId, index: true, ref: DEVICES_MODEL })
   device_id?: string;
 
   @Prop({ required: true })
@@ -38,38 +40,44 @@ export class Products {
   @Prop({ required: true })
   expiration_date?: Date;
 
-  // todo relastion
-  @Prop({ required: true })
-  image_url?: string;
+  @Prop({
+    required: false,
+    type: SchemaTypes.ObjectId,
+    index: true,
+    ref: MEDIA_MODEL,
+  })
+  media_id?: string;
 
-  @Prop({ required: false, type: [SchemaTypes.Decimal128] })
-  deposit?: Types.Decimal128[];
+  @Prop({ required: false, type: SchemaTypes.Decimal128 })
+  deposit?: Types.Decimal128;
 
-  @Prop({ required: false, type: [SchemaTypes.Decimal128] })
-  activation_price?: Types.Decimal128[];
+  @Prop({ required: false, type: SchemaTypes.Decimal128 })
+  activation_price?: Types.Decimal128;
 
-  @Prop({ required: false, type: [SchemaTypes.Decimal128] })
-  price?: Types.Decimal128[];
+  @Prop({ required: false, type: SchemaTypes.Decimal128 })
+  price?: Types.Decimal128;
 
-  @Prop({ required: false, type: [SchemaTypes.Decimal128] })
-  service_opening_price?: Types.Decimal128[];
+  @Prop({ required: false, type: SchemaTypes.Decimal128 })
+  service_opening_price?: Types.Decimal128;
 
-  @Prop({ required: false, type: [SchemaTypes.Decimal128] })
-  equipment_price?: Types.Decimal128[];
+  @Prop({ required: false, type: SchemaTypes.Decimal128 })
+  equipment_price?: Types.Decimal128;
 
   @Prop()
   shipping_fee?: boolean;
 
-  // todo
-  @Prop()
-  type?: string;
+  @Prop({ type: String, enum: ProductType, default: ProductType.SIM })
+  type: ProductType;
 
-  @Prop({ required: false, type: [SchemaTypes.Decimal128] })
-  monthly_fee?: Types.Decimal128[];
+  @Prop({ required: false, type: SchemaTypes.Decimal128 })
+  monthly_fee?: Types.Decimal128;
 
   @Prop()
   description?: string;
+
+  @Prop({ type: String, enum: ProductStatus, default: ProductStatus.ACTIVE })
+  status: ProductStatus;
 }
 
-export type ProductsDocument = Products & Document;
-export const ProductsSchema = SchemaFactory.createForClass(Products);
+export type ProductDocument = Product & Document;
+export const ProductSchema = SchemaFactory.createForClass(Product);

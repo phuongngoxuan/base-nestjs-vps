@@ -108,4 +108,15 @@ export const httpErrors = {
     message: 'Category not found.',
     code: 'CATEGORY_00001',
   },
+
+  // product error
+  PRODUCT_EXISTED: {
+    message: 'Product already existed.',
+    code: 'PRODUCT_00001',
+  },
+  
+  PRODUCT_NOT_FOUND: {
+    message: 'Product not found.',
+    code: 'USER_00002',
+  },
 };

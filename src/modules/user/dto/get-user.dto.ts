@@ -1,4 +1,4 @@
-import { IsEmail, IsMongoId, IsNumber } from 'class-validator';
+import { IsEmail, IsMongoId } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class GetUserDto {
@@ -6,9 +6,8 @@ export class GetUserDto {
     description: 'User ID',
     example: '6440d750376fd29eb0a33c41',
   })
-  @IsNumber()
   @IsMongoId()
-  id?: number;
+  id?: string;
 
   @ApiProperty({
     required: true,

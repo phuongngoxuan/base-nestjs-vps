@@ -18,6 +18,7 @@ import { MailModule } from './modules/mail/mail.module';
 import { MessageModule } from './modules/message/message.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { OrderModule } from './modules/order/order.module';
+import { ProductModule } from './modules/product/product.module';
 
 const Modules = [
   Logger,
@@ -43,6 +44,7 @@ const Modules = [
   MailModule,
   MessageModule,
   CategoriesModule,
-  OrderModule
+  OrderModule,
+  ProductModule
 ];
 export default Modules;

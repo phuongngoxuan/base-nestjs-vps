@@ -28,12 +28,6 @@ export class UserController {
     return this.usersService.signUpByCode(signUpByCodeDto);
   }
 
-  @Get()
-  @ApiOperation({ summary: 'Get all user' })
-  async findAll(@Query() query: GetUsersDto): Promise<User[]> {
-    return this.usersService.findAll(query);
-  }
-
   @Post('forgot-password')
   @ApiOperation({ summary: 'Get code change password by send email' })
   forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto): Promise<void> {
@@ -50,6 +44,12 @@ export class UserController {
   @ApiOperation({ summary: 'Change User password' })
   changePassword(@Body() changePasswordDto: ChangePasswordDto): Promise<void> {
     return this.usersService.changePassword(changePasswordDto);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Get all user' })
+  async findAll(@Query() query: GetUsersDto): Promise<User[]> {
+    return this.usersService.findAll(query);
   }
 
   @Patch(':id')
