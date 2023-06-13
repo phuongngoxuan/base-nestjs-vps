@@ -13,7 +13,7 @@ export class UpdateCategoriesDto {
 
   @ApiProperty({
     required: true,
-    example: 'tên collection mới',
+    example: 'update new name category',
   })
   @Trim()
   name?: string;

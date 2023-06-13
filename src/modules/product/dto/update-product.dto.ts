@@ -1,12 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsEnum, IsMongoId, IsOptional, IsString } from 'class-validator';
+import { IsDate, IsEnum, IsMongoId, IsNumber, IsOptional, IsString } from 'class-validator';
 import { ProductStatus, ProductType } from 'src/shares/enums/product.enum';
 
 export class UpdateProductDto {
-  @ApiProperty({ description: 'Product id', example: '647d8053e7a16483d3af5d5e' })
-  @IsMongoId()
-  readonly id: string;
-
   @ApiProperty({ required: false, example: 'update name product' })
   @IsOptional()
   readonly name?: string;
@@ -70,43 +66,49 @@ export class UpdateProductDto {
 
   @ApiProperty({ required: false })
   @IsOptional()
-  readonly deposit?: string;
+  @IsNumber()
+  readonly deposit?: number;
 
   @ApiProperty({ required: false })
   @IsOptional()
-  readonly activation_price?: string;
+  @IsNumber()
+  readonly activation_price?: number;
 
   @ApiProperty({ required: false })
   @IsOptional()
-  readonly price?: string;
+  @IsNumber()
+  readonly price?: number;
 
   @ApiProperty({ required: false })
   @IsOptional()
-  readonly service_opening_price?: string;
+  @IsNumber()
+  readonly service_opening_price?: number;
+
+  @ApiProperty({ required: false })
+  @IsNumber()
+  @IsOptional()
+  readonly equipment_price?: number;
 
   @ApiProperty({ required: false })
   @IsOptional()
-  readonly equipment_price?: string;
+  readonly shipping_fee?: boolean;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
-  readonly shipping_fee?: string;
-
-  @ApiProperty({ required: false, type: ProductType })
+  @ApiProperty({ required: false, enum: ProductType })
   @IsOptional()
   @IsEnum(ProductType)
   readonly type?: ProductType;
 
   @ApiProperty({ required: false })
   @IsOptional()
-  readonly monthly_fee?: string;
+  @IsNumber()
+  readonly monthly_fee?: number;
 
   @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   readonly description?: string;
 
-  @ApiProperty({ required: false, type: ProductStatus })
+  @ApiProperty({ required: false, enum: ProductStatus })
   @IsOptional()
   @IsEnum(ProductStatus)
   readonly status?: string;

@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Put, Param, Body, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Param, Body, Delete } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateCategoriesDto } from './dto/create-categories.dto';
 import { UpdateCategoriesDto } from './dto/update.categories.dto';
 import { Auth } from 'src/shares/decorators/http.decorators';
-import { GetCategoriesDto } from './dto/get-categories.dto';
+import { GetCategoriesByIdDto, GetCategoriesDto } from './dto/get-categories.dto';
 import { CategoriesService } from './categories.service';
 import { Categories } from './schemas/categories.schema';
 import { UserRole } from 'src/shares/enums/user.enum';
@@ -22,29 +22,29 @@ export class CategoriesController {
 
   @Get('/:id')
   @ApiOperation({ summary: 'Get categories by id' })
-  async findOneCategory(@Param('id') id: string): Promise<Categories> {
-    return await this.categoriesService.findCategoryById(id);
+  async findOneCategory(@Param() getCategoriesByIdDto: GetCategoriesByIdDto): Promise<Categories> {
+    return await this.categoriesService.findCategoryById(getCategoriesByIdDto.id);
   }
 
   @Post()
-  @Auth([UserRole.ADMIN])
   @ApiBearerAuth()
+  @Auth([UserRole.ADMIN])
   @ApiOperation({ summary: 'Admin create categories' })
   async createCategory(@Body() createCategoriesDto: CreateCategoriesDto): Promise<void> {
     await this.categoriesService.createCategory(createCategoriesDto);
   }
 
-  @Put()
-  @Auth([UserRole.ADMIN])
+  @Patch()
   @ApiBearerAuth()
+  @Auth([UserRole.ADMIN])
   @ApiOperation({ summary: 'Admin update categories by id' })
   async updateCategory(@Body() updateCategoriesDto: UpdateCategoriesDto): Promise<void> {
     await this.categoriesService.updateCategory(updateCategoriesDto);
   }
 
   @Delete()
-  @Auth([UserRole.ADMIN])
   @ApiBearerAuth()
+  @Auth([UserRole.ADMIN])
   @ApiOperation({ summary: 'Admin delete categories by id' })
   async deleteCategory(@Body() deleteCategoriesDto: DeleteCategoriesDto): Promise<void> {
     await this.categoriesService.deleteCategory(deleteCategoriesDto.id );

@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId } from 'mongoose';
 import { Exclude, Transform } from 'class-transformer';
 import { UserRole, UserStatus } from 'src/shares/enums/user.enum';
+import { CART_MODEL } from 'src/modules/cart/schemas/cart.schema';
 export const USER_MODEL='users';
 
 @Schema({ timestamps: true, collection: USER_MODEL })

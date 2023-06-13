@@ -13,19 +13,20 @@ export class ProductService {
 
   async find(payload: GetProductDto): Promise<Product[]> {
     const { sort, page, limit, category_id } = payload;
-
     const query: any = {};
 
-    if (!category_id) {
-      query.$or = [{ category_id }];
+    if (category_id) {
+      query.category_id = category_id;
     }
 
-    return this.productModel
+    const product = await this.productModel
       .find(query)
       .skip((page - 1) * limit)
       .limit(limit)
       .sort({ createdAt: sort })
       .lean();
+
+    return product;
   }
 
   async findById(id: string): Promise<Product> {
@@ -40,18 +41,16 @@ export class ProductService {
   async findByIdAndUpDate(id: string, payload: UpdateProductDto): Promise<void> {
     const product = await this.productModel.findById(id);
     if (!product) {
-      throw new BadRequestException(httpErrors.PRODUCT_EXISTED);
+      throw new BadRequestException(httpErrors.PRODUCT_NOT_FOUND);
     }
-    await this.productModel.findByIdAndUpdate(id, {
-      payload,
-    });
+    await this.productModel.findOneAndUpdate({ _id: id }, payload);
   }
 
-  async createProduct(createProductDto: CreateProductDto): Promise<void>{
+  async createProduct(createProductDto: CreateProductDto): Promise<void> {
     await this.productModel.create(createProductDto);
   }
 
-  async deleteById(id:string): Promise<void>{
-    await this.productModel.findOneAndDelete({id});
+  async deleteById(id: string): Promise<void> {
+    await this.productModel.findOneAndDelete({ id });
   }
 }

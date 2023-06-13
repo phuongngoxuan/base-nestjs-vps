@@ -9,7 +9,6 @@ import { LoginDto } from 'src/modules/auth/dto/login.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from '../user/user.service';
 import { RtGuards } from './guards/rt.guard';
-import { ObjectId } from 'mongoose';
 import { User } from '@sentry/node';
 import { LoginFacebookDto } from './dto/login-facebook.dto';
 import { LoginGoogleDto } from './dto/login-google.dto';
@@ -24,11 +23,8 @@ export class AuthController {
   @Get('/current')
   @Auth()
   @ApiOperation({ summary: 'Get new Access Token' })
-  async currentUser(@UserID() userId: ObjectId): Promise<User> {
-    const user = await this.userService.findById(userId.toString());
-    return {
-      data: user,
-    };
+  async currentUser(@UserID() userId: string): Promise<User> {
+   return this.userService.findById(userId);
   }
 
   @Post('login')

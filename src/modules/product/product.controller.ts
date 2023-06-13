@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Param, Patch, Query, Body, Delete } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { GetProductDto } from './dto/get-products.dto';
 import { Product } from './schemas/product.schema';
 import { ProductService } from './product.service';
@@ -8,6 +8,7 @@ import { Auth } from 'src/shares/decorators/http.decorators';
 import { UserRole } from 'src/shares/enums/user.enum';
 import { CreateProductDto } from './dto/create-product.dto';
 
+@ApiTags('Product')
 @Controller('product')
 export class ProductController {
   constructor(private productService: ProductService) {}
@@ -25,6 +26,7 @@ export class ProductController {
   }
 
   @Post('')
+  @ApiBearerAuth()
   @Auth([UserRole.ADMIN])
   @ApiOperation({ summary: 'Admin create new product' })
   async create(@Body() createProductDto: CreateProductDto): Promise<void> {
@@ -32,6 +34,7 @@ export class ProductController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
   @Auth([UserRole.ADMIN])
   @ApiOperation({ summary: 'Admin Update product by id' })
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateProductDto): Promise<void> {
@@ -39,6 +42,7 @@ export class ProductController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
   @Auth([UserRole.ADMIN])
   @ApiOperation({ summary: 'Admin delete product by id' })
   async deleteProduct(@Param('id') id: string): Promise<void> {

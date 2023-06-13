@@ -6,6 +6,7 @@ import { SUPPLIER_MODEL } from './supplier.schema';
 import { PARTNER_MODEL } from './partner.schema';
 import { DEVICES_MODEL } from './devices.schema';
 import { MEDIA_MODEL } from 'src/modules/media/schemas/media.schema';
+import { CART_MODEL } from 'src/modules/cart/schemas/cart.schema';
 export const PRODUCTS_MODEL = 'products';
 
 @Schema({ timestamps: true, collection: PRODUCTS_MODEL })

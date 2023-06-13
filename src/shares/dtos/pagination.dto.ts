@@ -8,7 +8,7 @@ export class PaginationDto {
     example: 1,
     description: '',
   })
-  @Transform(({ value }) => String(value))
+  @Transform(({ value }) => Number(value))
   @IsOptional()
   @IsIn([1, -1])
   sort?: -1 | 1 = -1;
