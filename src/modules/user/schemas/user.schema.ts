@@ -1,18 +1,16 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId } from 'mongoose';
-import { Exclude, Transform } from 'class-transformer';
+import { Document, Schema as MongooseSchema } from 'mongoose';
+import { Exclude } from 'class-transformer';
 import { UserRole, UserStatus } from 'src/shares/enums/user.enum';
-import { CART_MODEL } from 'src/modules/cart/schemas/cart.schema';
-export const USER_MODEL='users';
+import {} from 'src/modules/cart/schemas/cart.schema';
+import { USER_INFO_MODEL } from './user-info.schema';
+export const USER_MODEL = 'users';
 
 @Schema({ timestamps: true, collection: USER_MODEL })
 export class User {
-  @Transform(({ value }) => value.toString())
-  _id: ObjectId;
-  
   @Prop({ type: String })
   name: string;
-  
+
   @Prop({ type: String, unique: true, sparse: true })
   code: string;
 
@@ -38,6 +36,7 @@ export class User {
   @Prop({ type: String, enum: UserStatus, default: UserStatus.DE_ACTIVE })
   status: UserStatus;
 
+  //todo: ref module post pending
   @Prop({ required: true, type: [String], index: true, default: [] })
   posts: string[];
 
@@ -50,13 +49,14 @@ export class User {
   @Prop({ type: Boolean, default: false })
   banned: boolean;
 
-  @Prop({ default: '' })
-  image_url: string;
+  //todo: ref module media pending
+  @Prop({ required: false, type: MongooseSchema.Types.ObjectId, index: true  })
+  image_id: string;
 
-  @Prop({ required: true, type: [String], index: true, default: [] })
+  @Prop({ type: [String], index: true, default: [] })
   products: string[];
 
-  @Prop({ required: true, type: String, index: true, default: [] })
+  @Prop({ required: false, type: MongooseSchema.Types.ObjectId, index: true, ref: USER_INFO_MODEL })
   user_info_id: string;
 
   @Prop({ type: Date })

@@ -3,7 +3,7 @@ import { Cache } from 'cache-manager';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from './schemas/user.schema';
-import { UserRole } from 'src/shares/enums/user.enum';
+import { UserRole, UserStatus } from 'src/shares/enums/user.enum';
 import { GetUsersDto } from './dto/get-users.dto';
 import { GetUserDto } from './dto/get-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -36,11 +36,9 @@ export class UserService {
       throw new BadRequestException(httpErrors.USER_EMAIL_VERIFY_FAIL);
     }
     const signUpInfo: SignUpCacheInterface = JSON.parse(verifyUserCache);
-
     if (signUpInfo.attempt > 4) {
       throw new BadRequestException(httpErrors.USER_CODE_INVALID);
     }
-
     if (code != signUpInfo.code) {
       await this.cacheManager.set<string>(
         `${SIGN_UP_CACHE}${email}`,
@@ -51,11 +49,9 @@ export class UserService {
       );
       throw new BadRequestException(httpErrors.USER_EXPIRED_CODE);
     }
-
     if (signUpInfo.code !== code) {
       throw new BadRequestException(httpErrors.USER_EMAIL_VERIFY_FAIL);
     }
-
     const { name, display_name, password } = signUpInfo;
     await this.createUser({ email, name, display_name, password });
   }
@@ -75,7 +71,7 @@ export class UserService {
     const { verifyCode, password, email } = changePasswordByCode;
     const user = await this.checkVerificationCode(verifyCode, email);
     const { hashPassword } = await generateHash(password);
-    await this.userModel.updateOne({ _id: user._id }, { password: hashPassword });
+    await this.userModel.updateOne({ _id: user }, { password: hashPassword });
   }
 
   async checkVerificationCode(verifyCode: string, email: string): Promise<User> {
@@ -128,17 +124,17 @@ export class UserService {
     await this.userModel.updateOne({ _id: user.id }, { password: hashPassword });
   }
 
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
+  async createUser(createUserDto: CreateUserDto): Promise<UserDocument> {
     const { email } = createUserDto;
     const user = await this.userModel.findOne({ email });
     if (user) {
       throw new BadRequestException(httpErrors.ACCOUNT_EXISTED);
     }
 
-    return this.userModel.create(createUserDto);
+    return this.userModel.create({ ...createUserDto, status: UserStatus.ACTIVE });
   }
 
-  async findAll(query: GetUsersDto): Promise<User[]> {
+  async findAll(query: GetUsersDto): Promise<UserDocument[]> {
     const { sort, page, limit } = query;
     return this.userModel
       .find()
@@ -148,18 +144,18 @@ export class UserService {
       .lean();
   }
 
-  async findByIdAndUpdate(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+  async findByIdAndUpdate(id: string, updateUserDto: UpdateUserDto): Promise<UserDocument> {
     return this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true });
   }
 
-  async findOne(condition: GetUserDto, selectPassword = false): Promise<User> {
+  async findOne(condition: GetUserDto, selectPassword = false): Promise<UserDocument> {
     if (selectPassword) {
-      return this.userModel.findOne(condition).select('+password').lean().exec();
+      return this.userModel.findOne(condition).select('+password').lean();
     }
-    return this.userModel.findOne(condition).lean().exec();
+    return this.userModel.findOne(condition).lean();
   }
 
-  async findById(_id: string): Promise<User> {
+  async findById(_id: string): Promise<UserDocument> {
     return this.userModel.findById({ _id }).select('-password').lean();
   }
 

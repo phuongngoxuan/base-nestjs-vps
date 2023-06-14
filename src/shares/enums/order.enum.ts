@@ -4,8 +4,20 @@ export enum OrderSide {
 }
 
 export enum OrderType {
-  LIMIT = 'LIMIT',
-  MARKET = 'MARKET',
+  EXTEND = 'EXTEND',
+  NEW_ORDER = 'NEW_ORDER',
+}
+
+export enum OrderPaymentMethod {
+  DAIBIKI = 'DAIBIKI',
+  VISA_MASTER_CARD = 'VISA_MASTER_CARD',
+  QR_CODE = 'QR_CODE',
+  DIRECT = 'DIRECT',
+}
+
+export enum OrderWifiTemporarily {
+  NOT_RECEIVED = 'NOT_RECEIVED',
+  RECEIVED = 'RECEIVED',
 }
 
 export enum OrderStatus {
@@ -35,11 +47,4 @@ export enum OrderTrigger {
   LAST = 'LAST',
   INDEX = 'INDEX',
   ORACLE = 'ORACLE',
-}
-
-export enum OrderNote {
-  LIQUIDATION = 'LIQUIDATION',
-  INSURANCE_LIQUIDATION = 'INSURANCE_LIQUIDATION',
-  INSURANCE_FUNDING = 'INSURANCE_FUNDING',
-  REDUCE_ONLY_CANCELED = 'REDUCE_ONLY_CANCELED',
 }

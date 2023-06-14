@@ -112,11 +112,17 @@ export const httpErrors = {
   // product error
   PRODUCT_EXISTED: {
     message: 'Product already existed.',
-    code: 'PRODUCT_00001',
+    code: 'PRODUCT_00000',
   },
   
   PRODUCT_NOT_FOUND: {
     message: 'Product not found.',
-    code: 'USER_00002',
+    code: 'USER_00001',
+  },
+
+  // cart 
+  CART_EXISTED: {
+    message: 'Cart already existed.',
+    code: 'CART_00000',
   },
 };

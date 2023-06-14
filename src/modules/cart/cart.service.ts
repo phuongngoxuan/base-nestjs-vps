@@ -5,47 +5,45 @@ import { InjectModel } from '@nestjs/mongoose';
 import { CreateCartDto } from './dto/create-cart.dto';
 import { httpErrors } from 'src/shares/exceptions';
 import { GetCartDto } from './dto/get-cart.dto';
-import { PRODUCTS_MODEL, Product, ProductDocument } from '../product/schemas/product.schema';
-import { USER_MODEL } from '../user/schemas/user.schema';
+import { Product, ProductDocument } from '../product/schemas/product.schema';
+import { CartRepository } from './repositories/cart.repositories';
 
 @Injectable()
 export class CartService {
   constructor(
     @InjectModel(Cart.name) private cartModel: Model<CartDocument>,
     @InjectModel(Product.name) private productModel: Model<ProductDocument>,
+    private cartRepository: CartRepository,
   ) {}
 
-  async createCart(createCartDto: CreateCartDto, user_id: string): Promise<void> {
+  async createCart(createCartDto: CreateCartDto, user_id: string): Promise<Cart> {
     const { product_id } = createCartDto;
     const product = await this.productModel.findById(product_id);
+    const cart = await this.cartModel.findOne({ user_id, product_id });
 
     if (!product) {
       throw new BadRequestException(httpErrors.PRODUCT_NOT_FOUND);
     }
 
-    await this.cartModel.create({
+    if (!cart) {
+      throw new BadRequestException(httpErrors.CART_EXISTED);
+    }
+
+    return this.cartModel.create({
       product_id,
       user_id,
     });
   }
 
   async find(getCartDto: GetCartDto, user_id: string): Promise<Cart[]> {
-    const { sort, page, limit } = getCartDto;
-
-    return this.cartModel
-      .find({ user_id })
-      .populate({
-        path: 'user',
-        model: USER_MODEL,
-      })
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .sort({ createdAt: sort })
-      .lean()
-      .exec();
+    return this.cartRepository.find(getCartDto, user_id);
   }
 
   async findById(cart_id: string, user_id: string): Promise<Cart> {
-    return this.cartModel.findOne({ _id: cart_id, user_id });
+    return this.cartRepository.findByUserId(cart_id, user_id);
+  }
+
+  async deleteById(_id: string, user_id: string): Promise<void> {
+    await this.cartModel.deleteOne({ _id, user_id });
   }
 }

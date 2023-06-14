@@ -1,4 +1,4 @@
-#  "pepper-fI-backend"
+#  "Hallo-backend"
 
 ## Description
 mineraland backend
@@ -17,19 +17,7 @@ $ docker-compose up -d
 ```bash
 $ yarn console:dev seed
 ```
-
 ## Test:
-Prerequisites:
-  - mysql client
-     - MacOS:
-     ```bash
-     brew install mysql-client
-     ```
-     - Ubuntu:
-     ```bash
-     apt install mysql-client
-     ```
-
 Run test:
 ```bash
 $ docker-compose up -d
@@ -39,33 +27,10 @@ $ yarn test
 ```
 Run crawl:
 ```bash
-$ yarn console:dev crawl
+$ yarn console:dev xxxx
 ```
-## Environment
-
-## Migrate
-```bash
-npm run typeorm migration:generate -- -n create_users_table
-```
-
 ## run seeder
-run seeder token:
-```
-yarn console:dev seeder-token
-yarn console:dev seeder-user
-```
-
-## run crawler
-start server :
-```bash 
-pm2 start -n "Astrone-Pepperfi-Be" "yarn start:dev" 
-```
-
-Powered by [Nest](https://github.com/nestjs/nest)
-
-- Node: v14.17.0
-- Yarn: v1.22.10
-
+yarn console:dev xxxx
 ## Coding conventions
 - Using space (not tab)
 - Using absolute path: config in vscode: open settings.json -> setting 
