@@ -24,7 +24,7 @@ import { UserFacebookInfoDto } from './dto/user-facebook-info.dto';
 import { UserGoogleInfoDto } from './dto/user-google-info.dto';
 import { LoginGoogleDto } from './dto/login-google.dto';
 import { validateHash } from 'src/shares/helpers/bcrypt';
-import { User } from '../user/schemas/user.schema';
+import { UserDocument } from '../user/schemas/user.schema';
 import { PayloadAccessTokenDto } from 'src/shares/dtos/payload-access-token.dto';
 const baseFacebookUrl = config.get<string>('facebook.graph_api');
 const baseGoogleUrl = config.get<string>('google.base_api');
@@ -83,11 +83,11 @@ export class AuthService {
     } else throw new HttpException(httpErrors.REFRESH_TOKEN_EXPIRED, HttpStatus.BAD_REQUEST);
   }
 
-  async generateAccessToken(user: User): Promise<string> {
-    const { _id, role } = user;
+  async generateAccessToken(user: UserDocument): Promise<string> {
+    const { role } = user;
     return this.jwtService.signAsync(
       {
-        userId: _id,
+        userId: user._id,
         role: role,
         date: Date.now(),
       },
@@ -98,11 +98,11 @@ export class AuthService {
     );
   }
 
-  async generateRefreshToken(user: User): Promise<string> {
-    const { _id, role } = user;
+  async generateRefreshToken(user: UserDocument): Promise<string> {
+    const { role } = user;
     const refreshToken = await this.jwtService.signAsync(
       {
-        userId: _id,
+        userId: user._id,
         role: role,
         date: Date.now(),
       },
@@ -112,7 +112,7 @@ export class AuthService {
       },
     );
 
-    await this.cacheManager.set<string>(`${AUTH_CACHE_PREFIX}${_id}`, refreshToken, {
+    await this.cacheManager.set<string>(`${AUTH_CACHE_PREFIX}${user._id}`, refreshToken, {
       ttl: JWT_CONSTANTS.refreshTokenExpiry,
     });
 

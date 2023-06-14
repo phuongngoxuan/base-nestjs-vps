@@ -20,6 +20,7 @@ import { CategoriesModule } from './modules/categories/categories.module';
 import { OrderModule } from './modules/order/order.module';
 import { ProductModule } from './modules/product/product.module';
 import { CartModule } from './modules/cart/cart.module';
+import { PromotionalModule } from './modules/promotional/promotional.module';
 
 const Modules = [
   Logger,
@@ -47,6 +48,7 @@ const Modules = [
   CategoriesModule,
   OrderModule,
   ProductModule,
-  CartModule
+  CartModule,
+  PromotionalModule,
 ];
 export default Modules;

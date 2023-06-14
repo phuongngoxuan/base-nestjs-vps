@@ -1,9 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, SchemaTypes } from 'mongoose';
 import { Transform } from 'class-transformer';
+import { Options } from 'src/configs/database.config';
 export const CONVERSATIONS_MODEL = 'conversations';
 
-@Schema({ timestamps: true, collection: CONVERSATIONS_MODEL })
+@Schema({ ...Options, collection: CONVERSATIONS_MODEL })
 export class Conversation {
   @Transform(({ value }) => value.toString())
   _id: ObjectId;
