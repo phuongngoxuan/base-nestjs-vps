@@ -2,7 +2,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { Exclude } from 'class-transformer';
 import { UserRole, UserStatus } from 'src/shares/enums/user.enum';
-import {} from 'src/modules/cart/schemas/cart.schema';
 import { USER_INFO_MODEL } from './user-info.schema';
 export const USER_MODEL = 'users';
 
@@ -50,7 +49,7 @@ export class User {
   banned: boolean;
 
   //todo: ref module media pending
-  @Prop({ required: false, type: MongooseSchema.Types.ObjectId, index: true  })
+  @Prop({ required: false, type: MongooseSchema.Types.ObjectId, index: true })
   image_id: string;
 
   @Prop({ type: [String], index: true, default: [] })

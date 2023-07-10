@@ -17,6 +17,13 @@ kafka:
 
 sentry_dns: SENTRY_DNS
 
+master_mssql:
+  type: SQL_TYPE
+  host: SQL_HOST
+  port: SQL_PORT
+  username: SQL_USERNAME
+  password: SQL_PASSWORD
+
 mail:
   host: MAIL_HOST
   port: MAIL_PORT

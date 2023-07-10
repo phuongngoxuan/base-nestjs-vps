@@ -1,18 +1,46 @@
 import { getConfig } from 'src/configs/index';
 import { MongooseModuleOptions, SchemaOptions } from '@nestjs/mongoose';
 import mongooseAggregatePaginateV2 from 'src/shares/libs/mongoose-aggregate-paginate-v2';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const addedPaginate = require('mongoose-aggregate-paginate-v2');
-import { Types } from "mongoose";
+const { type, host, port, username, password } = getConfig().get<DatabaseSqlConfig>('master_mssql');
+import { Types } from 'mongoose';
+export interface DatabaseSqlConfig {
+  type: 'mssql';
+  host: string;
+  port: number;
+  username: string;
+  password: string;
+}
 
 export interface DatabaseConfig {
   uri: string;
   options: MongooseModuleOptions;
 }
 
+// MSSQL
+export const masterMssqlConfig = {
+  type,
+  host,
+  port: Number(port),
+  username,
+  password,
+  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+  synchronize: true,
+  stream: false,
+  name: 'master',
+  options: {
+    trustedConnection: true,
+    encrypt: true,
+    enableArithAbort: true,
+    trustServerCertificate: true,
+  },
+};
+
+// MONGODB
 export const mongodb = {
   uri: getConfig().get<string>('mongodb.uri'),
   options: {
+    autoCreate: false,
     directConnection: true,
     connectionFactory: (connection) => {
       connection.plugin(addedPaginate);
@@ -50,7 +78,7 @@ export const formatDecimal = (ret) => {
     ret.forEach((_, i) => (ret[i] = formatDecimal(ret[i])));
     return ret;
   }
-  if (typeof ret === "object") {
+  if (typeof ret === 'object') {
     try {
       for (const key of Object.keys(ret)) {
         ret[key] = formatDecimal(ret[key]);
@@ -60,4 +88,3 @@ export const formatDecimal = (ret) => {
   }
   return ret;
 };
-

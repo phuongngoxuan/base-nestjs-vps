@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, SchemaTypes,Types } from 'mongoose';
-import  {} from 'src/modules/cart/schemas/cart.schema';
+import { Document, SchemaTypes, Types } from 'mongoose';
 export const USER_INFO_MODEL = 'user_info';
 
 @Schema({ timestamps: true, collection: USER_INFO_MODEL })
@@ -8,7 +7,7 @@ export class UserInfo {
   @Prop({ type: String })
   name: string;
 
-  @Prop({ required: false, type: String, })
+  @Prop({ required: false, type: String })
   condittion: string;
 
   @Prop({ required: false, type: String })
@@ -49,7 +48,6 @@ export class UserInfo {
 
   @Prop({ required: false, type: SchemaTypes.Decimal128 })
   reward_points?: Types.Decimal128;
-
 }
 
 export type UserInfoDocument = UserInfo & Document;
