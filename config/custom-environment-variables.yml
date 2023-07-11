@@ -23,6 +23,9 @@ master_mssql:
   port: SQL_PORT
   username: SQL_USERNAME
   password: SQL_PASSWORD
+  database: SQL_DATABASE
+  name: SQL_DATABASE_NAME
+
 
 mail:
   host: MAIL_HOST

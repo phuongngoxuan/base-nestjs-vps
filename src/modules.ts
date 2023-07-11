@@ -12,6 +12,7 @@ import { UsersModule } from './modules/user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConnectionOptions } from 'typeorm';
 import { DatabaseCommonModule } from './models/database-common';
+import { MigrateModule } from './modules/migrate/migrate.module';
 
 const Modules = [
   Logger,
@@ -31,5 +32,7 @@ const Modules = [
     isGlobal: true,
   }),
   UsersModule,
+  MigrateModule,
+  ConsoleModule,
 ];
 export default Modules;

@@ -12,6 +12,6 @@ export class UserController {
   @Get()
   @ApiOperation({ summary: 'test connect database mongo and database sql' })
   async findAll(): Promise<User[]> {
-    return this.usersService.getUser();
+    return this.usersService.getUserSql();
   }
 }

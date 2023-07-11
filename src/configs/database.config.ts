@@ -2,7 +2,7 @@ import { getConfig } from 'src/configs/index';
 import { MongooseModuleOptions, SchemaOptions } from '@nestjs/mongoose';
 import mongooseAggregatePaginateV2 from 'src/shares/libs/mongoose-aggregate-paginate-v2';
 const addedPaginate = require('mongoose-aggregate-paginate-v2');
-const { type, host, port, username, password } = getConfig().get<DatabaseSqlConfig>('master_mssql');
+const { type, host, port, username, password, database, name } = getConfig().get<DatabaseSqlConfig>('master_mssql');
 import { Types } from 'mongoose';
 export interface DatabaseSqlConfig {
   type: 'mssql';
@@ -10,6 +10,8 @@ export interface DatabaseSqlConfig {
   port: number;
   username: string;
   password: string;
+  database: string;
+  name: string;
 }
 
 export interface DatabaseConfig {
@@ -25,9 +27,10 @@ export const masterMssqlConfig = {
   username,
   password,
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-  synchronize: true,
+  synchronize: false,
   stream: false,
-  name: 'master',
+  database,
+  name,
   options: {
     trustedConnection: true,
     encrypt: true,
