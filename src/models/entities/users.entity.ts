@@ -25,7 +25,7 @@ export class UsersEntity {
   FullName: string;
 
   @Column()
-  JapaneseName: string;
+  japaneseName: string;
 
   @Column()
   Phone: string;
