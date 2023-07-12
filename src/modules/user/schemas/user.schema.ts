@@ -9,16 +9,16 @@ export enum UserStatus {
 }
 
 export enum UserRole {
-  userRole0 = 0,
-  userRole1 = 1,
-  userRole2 = 2,
-  userRole3 = 3,
-  userRole5 = 5,
-  userRole6 = 6,
-  userRole7 = 7,
-  userRole8 = 8,
-  userRole9 = 9,
-  userRole10 = 10,
+  admin = 0,
+  quan_ly_don_hang = 1,
+  tu_van_vien = 2,
+  chuyen_hang = 3,
+  cong_tac_vien = 5,
+  ho_tro = 6,
+  ky_thuat_vien = 7,
+  nhan_vien_hikari = 8,
+  thanh_toan_vien = 9,
+  quang_ly_dich_vu = 10,
 }
 
 @Schema({ timestamps: true, collection: USER_MODEL })
@@ -69,16 +69,16 @@ export class User {
   @Prop({ required: false, type: String })
   pancake_extra: string;
 
-  @Prop({ required: false, type: String })
+  @Prop({ required: false, type: String, default: null })
   counselor_id: string; // todo convert
 
-  @Prop({ required: false, type: Number })
+  @Prop({ required: false, type: Number, default: null })
   old_counselor_id: number;
 
-  @Prop({ required: false, type: String })
+  @Prop({ required: false, type: String, default: null })
   source_id: string; // todo convert
 
-  @Prop({ required: false, type: Number })
+  @Prop({ required: false, type: Number, default: null })
   old_source_id: number;
 
   @Prop({ required: false, type: String })
@@ -99,10 +99,10 @@ export class User {
   @Prop({ required: false, type: Date })
   token_deadline: Date;
 
-  @Prop({ required: false, type: String })
-  part_hallo_id: string; // todo convert
+  @Prop({ required: false, type: String, default: null })
+  department_id: string; // todo convert
 
-  @Prop({ required: false, type: String })
+  @Prop({ required: false, type: String, default: null })
   old_part_hallo_id: string;
 
   @Prop({ type: Boolean, default: false })

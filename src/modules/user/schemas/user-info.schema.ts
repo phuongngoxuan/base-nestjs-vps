@@ -8,7 +8,7 @@ export class UserInfo {
   name: string;
 
   @Prop({ required: false, type: String })
-  condittion: string;
+  condition: string;
 
   @Prop({ required: false, type: String })
   upgrade_rewards: string;

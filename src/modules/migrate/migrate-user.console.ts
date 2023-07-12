@@ -6,13 +6,15 @@ import { UserService } from '../user/user.service';
 import { UsersEntity } from 'src/models/entities/users.entity';
 import { Client, ClientRole, ClientStatus } from '../user/schemas/client.schema';
 import { User, UserRole, UserStatus } from '../user/schemas/user.schema';
+import { Source } from '../user/schemas/source.schema';
+import { Department } from '../user/schemas/department.schema';
 
 @Console()
 @Injectable()
 export class MigrateUserConsole {
   private logger = new Logger(MigrateUserConsole.name);
-  userRoleInfo = [2, 3, 4, 5];
-  clientRoleInfo = [1];
+  userRoleInfo = [1, 2, 3, 5, 6, 7, 8, 9, 10];
+  clientRoleInfo = [4];
 
   constructor(private readonly usersService: UserService) {}
 
@@ -22,28 +24,138 @@ export class MigrateUserConsole {
   })
   async crawler(): Promise<void> {
     this.logger.log('MigrateUser');
+
+    await Promise.all([
+      // migrate source
+      this.migrateSource(),
+      // migrate department
+      this.migrateDepartment(),
+      // migrate user
+      this.migrateUser(),
+    ]);
+
+    // await Promise.all([
+    //   // update user *** counselor, source, part hallo update and change name department ***
+    //   this.updateUserInfo(),
+    //   // update client
+    //   this.updateClientInfo(),
+    // ]);
+
     try {
-      const [users, clients] = await Promise.all([await this.getUserDataFromSql(), await this.getClientDataFromSql()]);
-
-      // user
-      const usersInfo = await this.formatUserData(users);
-
-      // client
-      const clientInfo = await this.formatClientData(clients);
-
-      await this.usersService.createUserMongo(usersInfo);
-      await this.usersService.createClientMongo(clientInfo);
     } catch (error) {
       this.logger.error(error);
       process.exit(1);
     }
   }
 
-  private async getUserDataFromSql(): Promise<any[]> {
-    return await this.usersService.getUsersSql();
+  async updateUserInfo(): Promise<void> {
+    const users = await this.usersService.getUserMongo();
+
+    await Promise.all(
+      users.map(async (user) => {
+        const { old_counselor_id, old_source_id, old_part_hallo_id } = user;
+
+        const [counselor, source, department]: [any, any, any] = await Promise.all([
+          this.usersService.findOneUserMongo({ old_id: old_counselor_id }),
+          this.usersService.findSourceMongo({ old_id: old_source_id }),
+          this.usersService.findDepartmentMongo({ old_id: old_part_hallo_id }),
+        ]);
+
+        // if (counselor || source[0]?.id || department[0]?.id) {
+        //   console.log('_____________User______________');
+        //   console.log(user['id']);
+        //   console.log(counselor?.id);
+        //   console.log(source[0]?.id);
+        //   console.log(department[0]?.id);
+        // }
+
+        await this.usersService.findUserByIdAndUpdateMongo(user['id'], {
+          counselor_id: counselor?.id,
+          source_id: source[0]?.id,
+          department_id: department[0]?.id,
+        });
+      }),
+    );
   }
 
-  private async getClientDataFromSql(): Promise<any[]> {
+  async updateClientInfo(): Promise<void> {
+    const clients = await this.usersService.getClientMongo();
+
+    await Promise.all(
+      clients.map(async (client) => {
+        const { old_counselor_id, old_source_id, old_part_hallo_id } = client;
+
+        const [counselor, source, department]: [any, any, any] = await Promise.all([
+          this.usersService.findOneUserMongo({ old_id: old_counselor_id }),
+          this.usersService.findSourceMongo({ old_id: old_source_id }),
+          this.usersService.findDepartmentMongo({ old_id: old_part_hallo_id }),
+        ]);
+
+        // if (counselor?.id || source[0]?.id || department[0]?.id) {
+        //   console.log('_____________client______________');
+        //   console.log(client['id']);
+        //   console.log(counselor?.id);
+        //   console.log(source[0]?.id);
+        //   console.log(department[0]?.id);
+        // }
+
+        await this.usersService.findClientByIdAndUpdateMongo(client['id'], {
+          counselor_id: counselor?.id,
+          source_id: source?.id,
+          department_id: department?.id,
+        });
+      }),
+    );
+  }
+
+  async migrateSource(): Promise<void> {
+    const sourceSql = await this.usersService.findSourceSql({});
+
+    const sourceInfo = sourceSql.map((source) => {
+      const { id, Name, Language, CreatedBy, UpdatedBy } = source;
+      const newSource = new Source();
+
+      newSource.old_id = id;
+      newSource.name = Name;
+      newSource.language = Language;
+      newSource.created_by = CreatedBy;
+      newSource.updated_by = UpdatedBy;
+      return newSource;
+    });
+
+    await this.usersService.createSourceMongo(sourceInfo);
+  }
+
+  async migrateDepartment(): Promise<void> {
+    const departments = await this.usersService.findDepartmentSql({});
+
+    const departmentInfo = departments.map((department) => {
+      const { id, CreatedBy, UpdatedBy, PartName } = department;
+      const newDepartment = new Department();
+
+      newDepartment.old_id = id;
+      newDepartment.name = PartName;
+      newDepartment.created_by = CreatedBy;
+      newDepartment.updated_by = UpdatedBy;
+      return newDepartment;
+    });
+
+    await this.usersService.createDepartment(departmentInfo);
+  }
+
+  async migrateUser(): Promise<void> {
+    const [users, clients] = await Promise.all([await this.getUserDataFromSql(), await this.getClientDataFromSql()]);
+    const usersInfo = await this.formatUserData(users);
+    const clientInfo = await this.formatClientData(clients);
+
+    await Promise.all([this.usersService.createUserMongo(usersInfo), this.usersService.createClientMongo(clientInfo)]);
+  }
+
+  private async getUserDataFromSql(): Promise<UsersEntity[]> {
+    return this.usersService.getUsersSql();
+  }
+
+  private async getClientDataFromSql(): Promise<UsersEntity[]> {
     return this.usersService.getClientsSql();
   }
 
@@ -98,7 +210,6 @@ export class MigrateUserConsole {
       newClient.update_by = client?.UpdatedBy;
       newClient.token_app = client?.TokenApp;
       newClient.token_deadline = client?.TokenDeadline;
-      newClient.part_hallo_id = client?.PartHalloID;
       newClient.token_deadline = client?.TokenDeadline;
 
       // newClient.part_hallo_id = client.PartHalloID; // todo convert
@@ -153,7 +264,6 @@ export class MigrateUserConsole {
       newUser.update_by = user?.UpdatedBy;
       newUser.token_app = user?.TokenApp;
       newUser.token_deadline = user?.TokenDeadline;
-      newUser.part_hallo_id = user?.PartHalloID;
       newUser.token_deadline = user?.TokenDeadline;
 
       // newClient.part_hallo_id = client.PartHalloID; // todo convert

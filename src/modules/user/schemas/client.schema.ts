@@ -11,8 +11,7 @@ export enum ClientStatus {
 }
 
 export enum ClientRole {
-  clientRole4 = 4,
-  clientRole5 = 0,
+  khach_hang = 4,
 }
 
 @Schema({ _id: false })
@@ -65,7 +64,7 @@ export class Client {
   @Prop({ type: Boolean })
   gender: number;
 
-  @Prop({ type: [{ type: Number, enum: ClientRole }], default: [ClientRole.clientRole4] })
+  @Prop({ type: [{ type: Number, enum: ClientRole }], default: [ClientRole.khach_hang] })
   role: ClientRole[];
 
   @Prop({ required: false, type: String })
@@ -77,16 +76,16 @@ export class Client {
   @Prop({ required: false, type: String })
   pancake_extra: string;
 
-  @Prop({ required: false, type: String })
+  @Prop({ required: false, type: String, default: null })
   counselor_id: string; // todo convert
 
-  @Prop({ required: false, type: Number })
+  @Prop({ required: false, type: Number, default: null })
   old_counselor_id: number;
 
-  @Prop({ required: false, type: String })
+  @Prop({ required: false, type: String, default: null })
   source_id: string; // todo convert
 
-  @Prop({ required: false, type: Number })
+  @Prop({ required: false, type: Number, default: null })
   old_source_id: number;
 
   @Prop({ required: false, type: String })
@@ -107,10 +106,10 @@ export class Client {
   @Prop({ required: false, type: Date })
   token_deadline: Date;
 
-  @Prop({ required: false, type: String })
-  part_hallo_id: string; // todo convert
+  @Prop({ required: false, type: String, default: null })
+  department_id: string; // todo convert
 
-  @Prop({ required: false, type: String })
+  @Prop({ required: false, type: String, default: null })
   old_part_hallo_id: string;
 
   @Prop({ type: Boolean, default: false })

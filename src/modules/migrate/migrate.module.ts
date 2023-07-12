@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MigrateController } from './migrate.controller';
 import { MigrateService } from './migrate.service';
-import { MigrateUserConsole } from './migrate.console';
+import { MigrateUserConsole } from './migrate-user.console';
 import { UsersModule } from '../user/user.module';
 
 @Module({
