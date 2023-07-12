@@ -8,12 +8,11 @@ export const CLIENT_MODEL = 'clients';
 export enum ClientStatus {
   ACTIVE = 'ACTIVE',
   DE_ACTIVE = 'DE_ACTIVE',
-  LOCKED = 'LOCKED',
 }
 
 export enum ClientRole {
-  CLIENT = 1,
-  CLIENT_ = 2,
+  clientRole4 = 4,
+  clientRole5 = 0,
 }
 
 @Schema({ _id: false })
@@ -35,10 +34,10 @@ export class Client {
   @Prop({ type: String })
   name: string;
 
-  @Prop({ type: String, unique: true })
+  @Prop({ type: Number })
   old_id: number;
 
-  @Prop({ type: String, unique: true, sparse: true })
+  @Prop({ type: String, sparse: true })
   code: string;
 
   @Prop({ type: String, select: false })
@@ -55,7 +54,7 @@ export class Client {
   japanese_name: string;
 
   @Prop({ type: String })
-  phone_number: string;
+  phone: string;
 
   @Prop({ type: String })
   email: string;
@@ -64,11 +63,10 @@ export class Client {
   birthday: Date;
 
   @Prop({ type: Boolean })
-  gender: boolean;
+  gender: number;
 
-  // todo change
-  @Prop({ type: String, enum: ClientRole, default: ClientRole.CLIENT })
-  role: ClientRole;
+  @Prop({ type: [{ type: Number, enum: ClientRole }], default: [ClientRole.clientRole4] })
+  role: ClientRole[];
 
   @Prop({ required: false, type: String })
   pancake: string;
@@ -82,11 +80,17 @@ export class Client {
   @Prop({ required: false, type: String })
   counselor_id: string; // todo convert
 
+  @Prop({ required: false, type: Number })
+  old_counselor_id: number;
+
   @Prop({ required: false, type: String })
   source_id: string; // todo convert
 
   @Prop({ required: false, type: Number })
-  zipCode: number;
+  old_source_id: number;
+
+  @Prop({ required: false, type: String })
+  zip_code: string;
 
   @Prop({ required: false, type: String })
   image_url: string;
@@ -105,6 +109,9 @@ export class Client {
 
   @Prop({ required: false, type: String })
   part_hallo_id: string; // todo convert
+
+  @Prop({ required: false, type: String })
+  old_part_hallo_id: string;
 
   @Prop({ type: Boolean, default: false })
   is_verify: boolean;

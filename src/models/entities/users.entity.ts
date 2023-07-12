@@ -1,7 +1,5 @@
-import { DateTime } from 'aws-sdk/clients/devicefarm';
-import { Expose, Transform } from 'class-transformer';
-import { dateTransformer } from 'src/shares/helpers/transformer';
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Expose } from 'class-transformer';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
   name: 'tbl_Account',
@@ -25,7 +23,7 @@ export class UsersEntity {
   FullName: string;
 
   @Column()
-  japaneseName: string;
+  JapaneseName: string;
 
   @Column()
   Phone: string;
@@ -40,13 +38,13 @@ export class UsersEntity {
   Birthday: Date;
 
   @Column()
-  GenderID: Date;
+  GenderID: number;
 
   @Column()
-  RoleID: Date;
+  RoleID: string;
 
   @Column()
-  Status: string;
+  Status: number;
 
   @Column()
   Pancake: string;

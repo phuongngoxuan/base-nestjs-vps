@@ -1,8 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
-
-import { User } from './schemas/user.schema';
+import { UsersEntity } from 'src/models/entities/users.entity';
 
 @ApiTags('User')
 @Controller('user')
@@ -11,7 +10,7 @@ export class UserController {
 
   @Get()
   @ApiOperation({ summary: 'test connect database mongo and database sql' })
-  async findAll(): Promise<User[]> {
-    return this.usersService.getUserSql();
+  async findAll(): Promise<UsersEntity[]> {
+    return this.usersService.getUsersSql();
   }
 }

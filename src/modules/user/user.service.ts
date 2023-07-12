@@ -8,6 +8,7 @@ import { Model } from 'mongoose';
 import { Client, ClientDocument } from './schemas/client.schema';
 import { getConfig } from 'src/configs/index';
 import { DatabaseSqlConfig } from 'src/configs/database.config';
+import { UsersEntity } from 'src/models/entities/users.entity';
 const { name } = getConfig().get<DatabaseSqlConfig>('master_mssql');
 
 @Injectable()
@@ -21,14 +22,24 @@ export class UserService {
     this.logger.log(`MigrateUser`);
   }
 
-  async getUserSql(): Promise<any> {
-    // await this.usersRepositoryMaster.save({ name: 'test', email: 'nxphuongktvt@gmail.com' });
-    const users = await this.usersRepositoryMaster.find({
-      take: 100,
-      skip: 0,
+  async getUsersSql(): Promise<UsersEntity[]> {
+    const qb = this.usersRepositoryMaster.createQueryBuilder('tbl_Account');
+    qb.where(`(tbl_Account.[RoleID] NOT LIKE '%4%' )`);
+    return qb.getMany();
+  }
+
+  async getClientsSql(): Promise<UsersEntity[]> {
+    const qb = this.usersRepositoryMaster.createQueryBuilder('tbl_Account');
+    qb.where(`(tbl_Account.[RoleID] LIKE '%4%' )`);
+
+    return qb.getMany();
+  }
+
+  async findUserByIdSql(id: number): Promise<UsersEntity> {
+    const user = await this.usersRepositoryMaster.findOne({
+      id,
     });
-    console.log(users);
-    return users;
+    return user;
   }
 
   async createUserMongo(users: User[]): Promise<void> {
