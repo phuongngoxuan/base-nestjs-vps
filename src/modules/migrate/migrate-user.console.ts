@@ -34,12 +34,12 @@ export class MigrateUserConsole {
       this.migrateUser(),
     ]);
 
-    // await Promise.all([
-    //   // update user *** counselor, source, part hallo update and change name department ***
-    //   this.updateUserInfo(),
-    //   // update client
-    //   this.updateClientInfo(),
-    // ]);
+    await Promise.all([
+      // update user *** counselor, source, part hallo update and change name department ***
+      this.updateUserInfo(),
+      // update client
+      this.updateClientInfo(),
+    ]);
 
     try {
     } catch (error) {
