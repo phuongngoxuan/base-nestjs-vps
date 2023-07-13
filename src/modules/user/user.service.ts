@@ -16,6 +16,7 @@ import { PartHalloRepositorySql } from 'src/models/repositories/part-hallo.repos
 import { PartHalloEntity } from 'src/models/entities/part-hallo.entity';
 import { SourceEntity } from 'src/models/entities/source.entity';
 const { name } = getConfig().get<DatabaseSqlConfig>('master_mssql');
+const db_migrate_name = getConfig().get<string>('mongodb_migrate.name');
 
 @Injectable()
 export class UserService {
@@ -24,10 +25,10 @@ export class UserService {
     @InjectRepository(UserRepositorySql, name) private usersRepositoryMaster: UserRepositorySql,
     @InjectRepository(SourceRepositorySql, name) private sourceRepositoryMaster: SourceRepositorySql,
     @InjectRepository(PartHalloRepositorySql, name) private partHalloRepositoryMaster: PartHalloRepositorySql,
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
-    @InjectModel(Client.name) private clientModel: Model<ClientDocument>,
-    @InjectModel(Source.name) private sourceModel: Model<SourceDocument>,
-    @InjectModel(Department.name) private departmentModel: Model<DepartmentDocument>,
+    @InjectModel(User.name, db_migrate_name) private userModel: Model<UserDocument>,
+    @InjectModel(Client.name, db_migrate_name) private clientModel: Model<ClientDocument>,
+    @InjectModel(Source.name, db_migrate_name) private sourceModel: Model<SourceDocument>,
+    @InjectModel(Department.name, db_migrate_name) private departmentModel: Model<DepartmentDocument>,
   ) {
     this.logger.log(`MigrateUser`);
   }
@@ -41,7 +42,7 @@ export class UserService {
     return this.departmentModel.findOne(condition);
   }
 
-  async findDepartmentMongo(condition): Promise<Department[]> {
+  async findDepartmentMongo(condition?): Promise<Department[]> {
     return this.departmentModel.find(condition);
   }
 
@@ -58,7 +59,7 @@ export class UserService {
     return this.sourceModel.findOne(condition);
   }
 
-  async findSourceMongo(condition): Promise<Source[]> {
+  async findSourceMongo(condition?): Promise<Source[]> {
     return this.sourceModel.find(condition);
   }
 
@@ -67,11 +68,6 @@ export class UserService {
   }
 
   // user
-  async getUsersSql(): Promise<UsersEntity[]> {
-    const qb = this.usersRepositoryMaster.createQueryBuilder('tbl_Account');
-    qb.where(`(tbl_Account.[RoleID] NOT LIKE '%4%' )`);
-    return qb.getMany();
-  }
 
   async findOneUserMongo(condition): Promise<User> {
     return this.userModel.findOne(condition);
@@ -81,11 +77,28 @@ export class UserService {
     await this.userModel.findOneAndUpdate({ id }, payload);
   }
 
-  async getUserMongo(): Promise<User[]> {
+  async findUserMongo(): Promise<User[]> {
     return this.userModel.find();
   }
 
+  async createUserMongo(users: User[]): Promise<void> {
+    await this.userModel.create(users);
+  }
+
   //client
+  async findClientByIdAndUpdateMongo(id: string, payload): Promise<void> {
+    await this.clientModel.findOneAndUpdate({ id }, payload);
+  }
+
+  async findClientMongo(): Promise<Client[]> {
+    return this.clientModel.find();
+  }
+
+  async createClientMongo(client: Client[]): Promise<void> {
+    await this.clientModel.create(client);
+  }
+
+  // user SQL
   async getClientsSql(): Promise<UsersEntity[]> {
     const qb = this.usersRepositoryMaster.createQueryBuilder('tbl_Account');
     qb.where(`(tbl_Account.[RoleID] LIKE '%4%' )`);
@@ -93,25 +106,15 @@ export class UserService {
     return qb.getMany();
   }
 
+  async getUsersSql(): Promise<UsersEntity[]> {
+    const qb = this.usersRepositoryMaster.createQueryBuilder('tbl_Account');
+    qb.where(`(tbl_Account.[RoleID] NOT LIKE '%4%' )`);
+    return qb.getMany();
+  }
+
   async findUserByIdSql(id: number): Promise<UsersEntity> {
     return this.usersRepositoryMaster.findOne({
       id,
     });
-  }
-
-  async findClientByIdAndUpdateMongo(id: string, payload): Promise<void> {
-    await this.clientModel.findOneAndUpdate({ id }, payload);
-  }
-
-  async getClientMongo(): Promise<Client[]> {
-    return this.clientModel.find();
-  }
-
-  async createUserMongo(users: User[]): Promise<void> {
-    await this.userModel.create(users);
-  }
-
-  async createClientMongo(client: Client[]): Promise<void> {
-    await this.clientModel.create(client);
   }
 }

@@ -41,6 +41,8 @@ export class MigrateUserConsole {
       this.updateClientInfo(),
     ]);
 
+    /******************************************* migrate mongo main******************************/
+
     try {
     } catch (error) {
       this.logger.error(error);
@@ -49,7 +51,7 @@ export class MigrateUserConsole {
   }
 
   async updateUserInfo(): Promise<void> {
-    const users = await this.usersService.getUserMongo();
+    const users = await this.usersService.findUserMongo();
 
     await Promise.all(
       users.map(async (user) => {
@@ -61,14 +63,6 @@ export class MigrateUserConsole {
           this.usersService.findDepartmentMongo({ old_id: old_part_hallo_id }),
         ]);
 
-        // if (counselor || source[0]?.id || department[0]?.id) {
-        //   console.log('_____________User______________');
-        //   console.log(user['id']);
-        //   console.log(counselor?.id);
-        //   console.log(source[0]?.id);
-        //   console.log(department[0]?.id);
-        // }
-
         await this.usersService.findUserByIdAndUpdateMongo(user['id'], {
           counselor_id: counselor?.id,
           source_id: source[0]?.id,
@@ -79,7 +73,7 @@ export class MigrateUserConsole {
   }
 
   async updateClientInfo(): Promise<void> {
-    const clients = await this.usersService.getClientMongo();
+    const clients = await this.usersService.findClientMongo();
 
     await Promise.all(
       clients.map(async (client) => {
@@ -90,14 +84,6 @@ export class MigrateUserConsole {
           this.usersService.findSourceMongo({ old_id: old_source_id }),
           this.usersService.findDepartmentMongo({ old_id: old_part_hallo_id }),
         ]);
-
-        // if (counselor?.id || source[0]?.id || department[0]?.id) {
-        //   console.log('_____________client______________');
-        //   console.log(client['id']);
-        //   console.log(counselor?.id);
-        //   console.log(source[0]?.id);
-        //   console.log(department[0]?.id);
-        // }
 
         await this.usersService.findClientByIdAndUpdateMongo(client['id'], {
           counselor_id: counselor?.id,

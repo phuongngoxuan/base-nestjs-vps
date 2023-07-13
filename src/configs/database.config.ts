@@ -39,12 +39,28 @@ export const masterMssqlConfig = {
   },
 };
 
-// MONGODB
-export const mongodb = {
-  uri: getConfig().get<string>('mongodb.uri'),
+// MONGODB MIGRATE
+export const mongodb_migrate = {
+  uri: getConfig().get<string>('mongodb_migrate.uri'),
   options: {
     autoCreate: false,
     directConnection: true,
+    connectionName: getConfig().get<string>('mongodb_migrate.name'),
+    connectionFactory: (connection) => {
+      connection.plugin(addedPaginate);
+      connection.plugin(mongooseAggregatePaginateV2);
+      return connection;
+    },
+  },
+};
+
+// MONGODB MAIN
+export const mongodb_main = {
+  uri: getConfig().get<string>('mongodb_main.uri'),
+  options: {
+    autoCreate: false,
+    directConnection: true,
+    connectionName: getConfig().get<string>('mongodb_main.name'),
     connectionFactory: (connection) => {
       connection.plugin(addedPaginate);
       connection.plugin(mongooseAggregatePaginateV2);
