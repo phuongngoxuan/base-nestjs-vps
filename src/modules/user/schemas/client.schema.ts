@@ -76,16 +76,16 @@ export class Client {
   @Prop({ required: false, type: String })
   pancake_extra: string;
 
-  @Prop({ required: false, type: String, default: null })
+  @Prop({ required: false, type: String })
   counselor_id: string; // todo convert
 
-  @Prop({ required: false, type: Number, default: null })
+  @Prop({ required: false, type: Number })
   old_counselor_id: number;
 
-  @Prop({ required: false, type: String, default: null })
+  @Prop({ required: false, type: String })
   source_id: string; // todo convert
 
-  @Prop({ required: false, type: Number, default: null })
+  @Prop({ required: false, type: Number })
   old_source_id: number;
 
   @Prop({ required: false, type: String })
@@ -106,10 +106,10 @@ export class Client {
   @Prop({ required: false, type: Date })
   token_deadline: Date;
 
-  @Prop({ required: false, type: String, default: null })
+  @Prop({ required: false, type: String })
   department_id: string; // todo convert
 
-  @Prop({ required: false, type: String, default: null })
+  @Prop({ required: false, type: String })
   old_part_hallo_id: string;
 
   @Prop({ type: Boolean, default: false })

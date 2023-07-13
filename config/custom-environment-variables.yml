@@ -26,7 +26,6 @@ master_mssql:
   database: SQL_DATABASE
   name: SQL_DATABASE_NAME
 
-
 mail:
   host: MAIL_HOST
   port: MAIL_PORT
